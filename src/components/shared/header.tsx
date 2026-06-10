@@ -21,7 +21,15 @@ export function Header() {
 						</SignInButton>
 					}
 				>
-					<UserButton />
+					<div className="flex items-center gap-1">
+						<Button asChild variant="ghost" size="sm">
+							<Link href="/espace">Mon espace</Link>
+						</Button>
+						<Button asChild variant="ghost" size="sm">
+							<Link href="/profil">Profil</Link>
+						</Button>
+						<UserButton />
+					</div>
 				</Show>
 			</div>
 		</header>

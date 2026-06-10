@@ -6,6 +6,7 @@ import { DeleteDayButton } from '@/components/dashboard/delete-day-button'
 import { EventActions } from '@/components/dashboard/event-actions'
 import { ShareCard } from '@/components/dashboard/share-card'
 import { SlotRow } from '@/components/dashboard/slot-row'
+import { CancelBookingButton } from '@/components/event-page/cancel-booking-button'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -115,19 +116,25 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 													</p>
 													<ul className="mt-2 space-y-2">
 														{slotBookings.map(booking => (
-															<li key={booking.id} className="rounded-md bg-muted/50 px-3 py-2 text-sm">
-																<p className="font-medium">{booking.child_name}</p>
-																<p className="text-muted-foreground text-xs">
-																	{[booking.expand?.parent?.first_name, booking.expand?.parent?.last_name]
-																		.filter(Boolean)
-																		.join(' ') || 'Parent'}
-																	{booking.expand?.parent
-																		? ` · ${booking.expand.parent.contact_email || booking.expand.parent.email}`
-																		: ''}
-																</p>
-																{booking.comment ? (
-																	<p className="mt-1 text-muted-foreground">{booking.comment}</p>
-																) : null}
+															<li
+																key={booking.id}
+																className="flex items-start justify-between gap-2 rounded-md bg-muted/50 px-3 py-2 text-sm"
+															>
+																<div className="min-w-0">
+																	<p className="font-medium">{booking.child_name}</p>
+																	<p className="text-muted-foreground text-xs">
+																		{[booking.expand?.parent?.first_name, booking.expand?.parent?.last_name]
+																			.filter(Boolean)
+																			.join(' ') || 'Parent'}
+																		{booking.expand?.parent
+																			? ` · ${booking.expand.parent.contact_email || booking.expand.parent.email}`
+																			: ''}
+																	</p>
+																	{booking.comment ? (
+																		<p className="mt-1 text-muted-foreground">{booking.comment}</p>
+																	) : null}
+																</div>
+																<CancelBookingButton bookingId={booking.id} label="Annuler" variant="ghost" />
 															</li>
 														))}
 													</ul>
