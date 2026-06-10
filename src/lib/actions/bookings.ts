@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { toDate } from '@/lib/datetime'
 import { sendBookingConfirmation, sendTeacherBookingNotification } from '@/lib/email'
+import { logInfo } from '@/lib/log'
 import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
@@ -106,6 +107,7 @@ export async function createBooking(
 	})
 	const rank = all.findIndex(b => b.id === booking.id) + 1
 	if (rank === 0 || rank > slot.capacity) {
+		logInfo('booking', 'course perdue sur le créneau, auto-suppression', { slotId, rank, capacity: slot.capacity })
 		await pb.collection('bookings').delete(booking.id)
 		revalidatePath(`/r/${event.slug}`)
 		return { ok: false, error: 'Ce créneau vient d’être complété par une autre famille, choisissez-en un autre.' }

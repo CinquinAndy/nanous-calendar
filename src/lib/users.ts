@@ -3,6 +3,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import type PocketBase from 'pocketbase'
 import { cache } from 'react'
+import { logError, logInfo } from '@/lib/log'
 import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import type { UserRecord, UserRole } from '@/types'
@@ -32,25 +33,36 @@ export const ensureUser = cache(async (): Promise<UserRecord | null> => {
 	const clerkUser = await currentUser()
 	if (!clerkUser) return null
 
+	logInfo('ensureUser', 'record absent, création', { clerkId: userId })
 	try {
-		return await pb.collection('users').create<UserRecord>({
+		const created = await pb.collection('users').create<UserRecord>({
 			clerk_id: userId,
 			email: clerkUser.primaryEmailAddress?.emailAddress ?? clerkUser.emailAddresses[0]?.emailAddress ?? '',
 			first_name: clerkUser.firstName ?? '',
 			last_name: clerkUser.lastName ?? '',
 			role: (clerkUser.publicMetadata?.role as string) ?? '',
 		})
+		logInfo('ensureUser', 'création OK', { clerkId: userId, pbId: created.id })
+		return created
 	} catch (err) {
 		// Course avec le webhook user.created (ou un autre rendu concurrent) :
 		// l'index unique sur clerk_id a refusé le doublon. Quelle que soit la
 		// forme de l'erreur, on retente la lecture avec un petit backoff, le
 		// temps que l'écriture gagnante soit visible. On ne relance l'erreur
 		// que si le record n'existe vraiment pas.
+		logInfo('ensureUser', 'création refusée (course probable), tentatives de récupération', {
+			clerkId: userId,
+			status: (err as { status?: number })?.status,
+		})
 		for (const delayMs of [0, 100, 300, 800]) {
 			if (delayMs > 0) await new Promise(resolve => setTimeout(resolve, delayMs))
 			const record = await findUserByClerkId(pb, userId).catch(() => null)
-			if (record) return record
+			if (record) {
+				logInfo('ensureUser', 'récupération OK (record gagnant relu)', { clerkId: userId, afterMs: delayMs })
+				return record
+			}
 		}
+		logError('ensureUser', 'récupération ÉCHOUÉE : record introuvable après la course', { clerkId: userId })
 		throw err
 	}
 })

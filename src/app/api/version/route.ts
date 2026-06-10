@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
  */
 export function GET() {
 	return NextResponse.json({
-		marker: 'fix-course-inscription-v2',
-		note: 'ensureUser retry inconditionnel + webhook tolérant',
+		marker: 'fix-course-inscription-v3-logs',
+		note: 'ensureUser retry inconditionnel + webhook tolérant + logs de traçage',
 	})
 }
