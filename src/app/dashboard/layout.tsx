@@ -6,7 +6,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-3xl flex-1 p-4 pb-24">{children}</main>
+			<main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-8 pb-24 sm:pt-12">{children}</main>
 		</>
 	)
 }

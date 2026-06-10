@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Header } from '@/components/shared/header'
-import { Kicker } from '@/components/shared/kicker'
+import { PageHeader } from '@/components/shared/page-header'
 
 export const metadata = { title: 'Plan du site' }
 
@@ -42,11 +42,8 @@ export default function SitemapPage() {
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-8 p-4 pb-24">
-				<div className="space-y-1">
-					<Kicker>Navigation</Kicker>
-					<h1 className="font-medium text-2xl tracking-tight">Plan du site</h1>
-				</div>
+			<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+				<PageHeader kicker="Navigation" title="Plan du site" />
 
 				{sections.map(section => (
 					<section key={section.title} className="space-y-2">

@@ -5,7 +5,6 @@ import { CancelBookingButton } from '@/components/event-page/cancel-booking-butt
 import { type DayView, SlotPicker } from '@/components/event-page/slot-picker'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Header } from '@/components/shared/header'
-import { Kicker } from '@/components/shared/kicker'
 import { formatParisDate, formatParisDateTime, formatParisTime, parisDayKey } from '@/lib/datetime'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
@@ -80,11 +79,18 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-6 p-4 pb-24">
-				<div className="space-y-2">
-					<Kicker>Réunion parents-profs</Kicker>
-					<h1 className="font-medium text-2xl tracking-tight">{event.title}</h1>
-					<div className="space-y-1 text-muted-foreground text-sm">
+			<main className="mx-auto w-full max-w-2xl flex-1 space-y-8 px-4 pt-6 pb-24 sm:pt-8">
+				{/* Mini-hero sombre, écho de la landing */}
+				<div
+					className="space-y-3 overflow-hidden rounded-2xl p-6 sm:p-8"
+					style={{
+						background:
+							'radial-gradient(120% 90% at 80% 0%, color-mix(in oklab, var(--primary) 55%, transparent), transparent 60%), #0C0B10',
+					}}
+				>
+					<p className="font-mono text-[#E1E0CC]/60 text-[11px] uppercase tracking-[0.2em]">Réunion parents-profs</p>
+					<h1 className="font-medium text-[#E1E0CC] text-3xl tracking-tight sm:text-4xl">{event.title}</h1>
+					<div className="space-y-1 text-[#E1E0CC]/70 text-sm">
 						{teacherName ? (
 							<p className="flex items-center gap-1.5">
 								<GraduationCap className="size-4 shrink-0" />
@@ -98,7 +104,9 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 							</p>
 						) : null}
 					</div>
-					{event.description ? <p className="whitespace-pre-line pt-1 text-sm">{event.description}</p> : null}
+					{event.description ? (
+						<p className="whitespace-pre-line pt-1 text-[#E1E0CC]/80 text-sm leading-relaxed">{event.description}</p>
+					) : null}
 				</div>
 
 				{myBooking && mySlot ? (

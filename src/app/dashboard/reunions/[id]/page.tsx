@@ -8,6 +8,7 @@ import { ShareCard } from '@/components/dashboard/share-card'
 import { SlotRow } from '@/components/dashboard/slot-row'
 import { CancelBookingButton } from '@/components/event-page/cancel-booking-button'
 import { EmptyState } from '@/components/shared/empty-state'
+import { PageHeader } from '@/components/shared/page-header'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -60,23 +61,24 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 	const shareUrl = `${env.NEXT_PUBLIC_APP_URL}/r/${event.slug}`
 
 	return (
-		<div className="space-y-6">
-			<div className="space-y-3">
+		<div className="space-y-8">
+			<div className="space-y-4">
 				<Button asChild variant="ghost" size="sm" className="-ml-2">
 					<Link href="/dashboard">
 						<ArrowLeft className="size-4" />
 						Mes réunions
 					</Link>
 				</Button>
-				<div className="flex items-start justify-between gap-3">
-					<div className="min-w-0 space-y-1">
-						<h1 className="font-medium text-2xl tracking-tight">{event.title}</h1>
-						{event.school ? <p className="text-muted-foreground text-sm">{event.school}</p> : null}
-					</div>
-					<Badge variant={event.status === 'open' ? 'default' : 'secondary'} className="shrink-0">
-						{event.status === 'open' ? 'Ouverte' : 'Fermée'}
-					</Badge>
-				</div>
+				<PageHeader
+					kicker="Réunion"
+					title={event.title}
+					description={event.school || undefined}
+					action={
+						<Badge variant={event.status === 'open' ? 'default' : 'secondary'}>
+							{event.status === 'open' ? 'Ouverte' : 'Fermée'}
+						</Badge>
+					}
+				/>
 			</div>
 
 			<Tabs defaultValue={slots.length === 0 ? 'creneaux' : 'planning'}>
@@ -92,7 +94,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 					</TabsTrigger>
 				</TabsList>
 
-				<TabsContent value="planning" className="space-y-6 pt-4">
+				<TabsContent value="planning" className="space-y-8 pt-6">
 					{bookings.length === 0 ? (
 						<EmptyState
 							icon={ClipboardList}
@@ -172,7 +174,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 					)}
 				</TabsContent>
 
-				<TabsContent value="creneaux" className="space-y-6 pt-4">
+				<TabsContent value="creneaux" className="space-y-8 pt-6">
 					<AddDaySheet eventId={event.id} />
 
 					{slots.length === 0 ? (
@@ -210,7 +212,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 					)}
 				</TabsContent>
 
-				<TabsContent value="partager" className="space-y-4 pt-4">
+				<TabsContent value="partager" className="space-y-4 pt-6">
 					<ShareCard url={shareUrl} />
 					<EventActions eventId={event.id} status={event.status} />
 				</TabsContent>

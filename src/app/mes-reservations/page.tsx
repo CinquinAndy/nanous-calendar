@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { CancelBookingButton } from '@/components/event-page/cancel-booking-button'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Header } from '@/components/shared/header'
-import { Kicker } from '@/components/shared/kicker'
+import { PageHeader } from '@/components/shared/page-header'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { googleCalendarUrl } from '@/lib/calendar'
@@ -37,11 +37,12 @@ export default async function MyBookingsPage() {
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-6 p-4 pb-24">
-				<div className="space-y-1">
-					<Kicker>Espace famille</Kicker>
-					<h1 className="font-medium text-2xl tracking-tight">Mes réservations</h1>
-				</div>
+			<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+				<PageHeader
+					kicker="Espace famille"
+					title="Mes réservations"
+					description="Vos rendez-vous à venir et passés, avec l’ajout au calendrier en un clic."
+				/>
 
 				{upcoming.length === 0 && past.length === 0 ? (
 					<EmptyState

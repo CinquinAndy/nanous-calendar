@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { ProfileForm } from '@/components/profile/profile-form'
 import { Header } from '@/components/shared/header'
-import { Kicker } from '@/components/shared/kicker'
+import { PageHeader } from '@/components/shared/page-header'
 import { Badge } from '@/components/ui/badge'
 import { ensureUser } from '@/lib/users'
 
@@ -15,14 +15,12 @@ export default async function ProfilePage() {
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-md flex-1 space-y-6 p-4 pb-24">
-				<div className="flex items-center justify-between gap-3">
-					<div className="space-y-1">
-						<Kicker>Mon compte</Kicker>
-						<h1 className="font-medium text-2xl tracking-tight">Mon profil</h1>
-					</div>
-					<Badge variant="secondary">{user.role === 'teacher' ? 'Enseignant·e' : 'Parent'}</Badge>
-				</div>
+			<main className="mx-auto w-full max-w-md flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+				<PageHeader
+					kicker="Mon compte"
+					title="Mon profil"
+					action={<Badge variant="secondary">{user.role === 'teacher' ? 'Enseignant·e' : 'Parent'}</Badge>}
+				/>
 				<ProfileForm
 					initial={{
 						firstName: user.first_name,

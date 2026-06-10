@@ -1,5 +1,5 @@
 import { Header } from '@/components/shared/header'
-import { Kicker } from '@/components/shared/kicker'
+import { PageHeader } from '@/components/shared/page-header'
 
 export const metadata = { title: 'Mentions légales' }
 
@@ -16,11 +16,8 @@ export default function LegalPage() {
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-8 p-4 pb-24">
-				<div className="space-y-1">
-					<Kicker>Informations légales</Kicker>
-					<h1 className="font-medium text-2xl tracking-tight">Mentions légales</h1>
-				</div>
+			<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+				<PageHeader kicker="Informations légales" title="Mentions légales" />
 
 				<Section title="Éditeur du site">
 					<p>

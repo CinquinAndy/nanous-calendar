@@ -84,8 +84,8 @@ export function SlotPicker({
 				{days.map(day => {
 					const available = day.slots.filter(s => s.remaining > 0).length
 					return (
-						<AccordionItem key={day.key} value={day.key} className="rounded-lg border px-3 last:border-b">
-							<AccordionTrigger className="py-3 hover:no-underline">
+						<AccordionItem key={day.key} value={day.key} className="rounded-xl border px-4 last:border-b">
+							<AccordionTrigger className="py-4 hover:no-underline">
 								<div className="flex w-full items-center justify-between gap-2 pr-2">
 									<span className="font-medium capitalize">{day.label}</span>
 									<span className="text-muted-foreground text-xs">
@@ -95,8 +95,8 @@ export function SlotPicker({
 									</span>
 								</div>
 							</AccordionTrigger>
-							<AccordionContent className="pb-3">
-								<div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+							<AccordionContent className="pb-4">
+								<div className="grid grid-cols-3 gap-2.5 sm:grid-cols-4">
 									{day.slots.map(slot => {
 										const full = slot.remaining <= 0
 										return (
@@ -106,7 +106,7 @@ export function SlotPicker({
 												disabled={(full && !slot.isMine) || pending}
 												onClick={() => pick(day, slot)}
 												className={cn(
-													'flex flex-col items-center rounded-lg border py-2 transition-colors',
+													'flex flex-col items-center gap-0.5 rounded-xl border py-2.5 transition-colors',
 													slot.isMine
 														? 'border-primary bg-primary text-primary-foreground'
 														: full
