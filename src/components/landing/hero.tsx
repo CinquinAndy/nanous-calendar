@@ -57,19 +57,23 @@ function WordsPullUp({
 /* ---------------- Fond : glow violet + grain ---------------- */
 const NOISE_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
 
-function HeroBackground() {
+function HeroBackground({ videoSrc }: { videoSrc?: string }) {
 	return (
 		<>
-			<div
-				className="absolute inset-0"
-				style={{
-					background: `
-						radial-gradient(110% 75% at 75% 0%, oklch(0.42 0.14 288 / 0.65), transparent 60%),
-						radial-gradient(80% 55% at 8% 95%, oklch(0.36 0.12 305 / 0.55), transparent 55%),
-						radial-gradient(60% 40% at 45% 55%, oklch(0.28 0.08 270 / 0.4), transparent 65%),
-						#0C0B10`,
-				}}
-			/>
+			{videoSrc ? (
+				<video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover" src={videoSrc} />
+			) : (
+				<div
+					className="absolute inset-0"
+					style={{
+						background: `
+							radial-gradient(110% 75% at 75% 0%, oklch(0.42 0.14 288 / 0.65), transparent 60%),
+							radial-gradient(80% 55% at 8% 95%, oklch(0.36 0.12 305 / 0.55), transparent 55%),
+							radial-gradient(60% 40% at 45% 55%, oklch(0.28 0.08 270 / 0.4), transparent 65%),
+							#0C0B10`,
+					}}
+				/>
+			)}
 			<div
 				className="pointer-events-none absolute inset-0 opacity-[0.55] mix-blend-overlay"
 				style={{ backgroundImage: NOISE_SVG }}
@@ -85,11 +89,13 @@ export function LandingHero({
 	ctaLabel,
 	spaceHref,
 	spaceLabel,
+	videoSrc,
 }: {
 	ctaHref: string
 	ctaLabel: string
 	spaceHref: string
 	spaceLabel: string
+	videoSrc?: string
 }) {
 	const navItems = [
 		{ label: 'Fonctionnement', href: '#fonctionnement' },
@@ -100,7 +106,7 @@ export function LandingHero({
 	return (
 		<section className="h-[100svh] w-full p-2 sm:p-3">
 			<div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
-				<HeroBackground />
+				<HeroBackground videoSrc={videoSrc} />
 
 				{/* Navbar pill */}
 				<nav className="-translate-x-1/2 absolute top-0 left-1/2 z-20">
