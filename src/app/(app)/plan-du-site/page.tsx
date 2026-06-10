@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Header } from '@/components/shared/header'
 import { PageHeader } from '@/components/shared/page-header'
 
 export const metadata = { title: 'Plan du site' }
@@ -40,29 +39,26 @@ const sections = [
 
 export default function SitemapPage() {
 	return (
-		<>
-			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
-				<PageHeader kicker="Navigation" title="Plan du site" />
+		<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+			<PageHeader kicker="Navigation" title="Plan du site" />
 
-				{sections.map(section => (
-					<section key={section.title} className="space-y-2">
-						<h2 className="font-medium text-lg">{section.title}</h2>
-						<ul className="space-y-1.5">
-							{section.links.map(link => (
-								<li key={link.href + link.label}>
-									<Link
-										href={link.href}
-										className="text-muted-foreground text-sm underline-offset-4 transition-colors hover:text-foreground hover:underline"
-									>
-										{link.label}
-									</Link>
-								</li>
-							))}
-						</ul>
-					</section>
-				))}
-			</main>
-		</>
+			{sections.map(section => (
+				<section key={section.title} className="space-y-2">
+					<h2 className="font-medium text-lg">{section.title}</h2>
+					<ul className="space-y-1.5">
+						{section.links.map(link => (
+							<li key={link.href + link.label}>
+								<Link
+									href={link.href}
+									className="text-muted-foreground text-sm underline-offset-4 transition-colors hover:text-foreground hover:underline"
+								>
+									{link.label}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</section>
+			))}
+		</main>
 	)
 }

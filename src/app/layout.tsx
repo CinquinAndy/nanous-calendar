@@ -69,7 +69,7 @@ export default function RootLayout({
 				<body className="flex min-h-full flex-col bg-grid">
 					{children}
 					<Footer />
-					<Toaster position="top-center" />
+					<Toaster position="top-center" richColors closeButton />
 				</body>
 			</html>
 		</ClerkProvider>
