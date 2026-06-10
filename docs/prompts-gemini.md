@@ -27,43 +27,41 @@ Tant que les fichiers n'existent pas, le hero affiche le dégradé violet et les
 Prompt principal (à coller tel quel) :
 
 ```
-Cinematic 3D motion design loop, premium editorial style, NOT a tech startup aesthetic.
+Cinematic live-action-style nature loop, calm and cozy, premium editorial mood.
 
-Scene: a minimalist floating 3D calendar made of soft matte cream-colored (#E1E0CC) rounded
-tiles, suspended in a deep charcoal-black void (#0C0B10) with a large soft violet glow
-(#6D5BD0) breathing slowly behind it, like studio lighting through haze.
+Scene: a serene twilight landscape — soft rolling meadow at dusk, gentle mist in the
+distance, a deep dusk sky in dark blue-violet tones (#0C0B10 shadows, #6D5BD0 violet
+haze). In the middle of the frame, slightly above the horizon, floats a single very
+simple calendar: a plain cream-colored (#E1E0CC) rounded rectangle page with a thin
+binding bar on top, almost no detail, glowing softly as if it were the only light
+source of the scene, like a quiet lantern. Its warm light spills gently onto the
+grass and the mist around it.
 
-Action, in one seamless choreography:
-1. Empty calendar grid drifts gently; a row of time-slot tiles assembles itself one by one,
-   each tile sliding into place with a soft, satisfying snap — as if a teacher is opening
-   appointment slots.
-2. Then three small cream cards, each carrying a tiny abstract family glyph (two rounded
-   figures, no faces), glide in from different directions and dock into separate slots,
-   one after another. Each docking emits a quiet violet light pulse and the tile's corner
-   lights up with a small check mark shape.
-3. The filled calendar floats and slowly rotates a few degrees; the violet glow breathes;
-   the loop closes back to the starting drift.
+The calendar itself does NOT move or animate. All the life comes from the ambiance:
+tall grass swaying slowly in a light breeze, a few dust motes and tiny pollen specks
+drifting through the calendar's light, thin clouds sliding very slowly across the sky,
+the mist breathing softly. Everything slow, peaceful, hypnotic.
 
-Camera: very slow dolly with a slight orbital drift, shallow depth of field, the calendar
-occupies the upper-center of the frame, generous empty dark space in the lower third
+Camera: locked tripod or an extremely slow push-in, the calendar sits in the
+upper-center of the frame, the lower third of the frame stays dark and uncluttered
 (text will be overlaid there).
 
-Lighting & texture: soft studio key light, gentle rim light on tile edges, subtle film
-grain, no lens flares, no particles, no bokeh confetti.
+Lighting: dusk ambience, the cream calendar as the main warm light source, soft violet
+atmospheric haze, subtle film grain, no lens flares.
 
-Palette strictly limited to: deep black-violet background #0C0B10, cream #E1E0CC objects,
-violet glow #6D5BD0, one warm peach accent #E8A857 used only on the check-mark pulses.
+Palette: deep dark blue-violet night tones, cream #E1E0CC light, violet #6D5BD0 haze.
 
-Mood: calm, tactile, reassuring, crafted — like a high-end stationery brand film.
-No text, no logos, no UI screenshots, no humans, no faces, no hands.
-Slow pace, ~10 seconds, perfectly seamless loop, 4K, 24fps.
+Mood: serene, cozy, reassuring — like a quiet evening before a school day.
+No text, no logos, no humans, no animals, no buildings.
+~10 seconds, perfectly seamless loop, 4K, 24fps.
 ```
 
-Variante si le rendu est trop chargé :
+Variante encore plus épurée (si le paysage devient trop chargé) :
 
 ```
-Same scene, but even more minimal: only five calendar tiles, one card docking once,
-extreme negative space, slower camera, the violet glow is the main source of movement.
+Same mood, but minimal: only a dark misty gradient horizon, the simple glowing cream
+calendar floating in the center-top, and slow drifting dust particles in its light.
+No grass, no clouds — just mist, light and dust. Perfectly seamless loop.
 ```
 
 Conseils :
