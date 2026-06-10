@@ -9,10 +9,10 @@ export default async function HomePage() {
 
 	const cta =
 		user?.role === 'teacher'
-			? { href: '/dashboard', label: 'Mes réunions' }
+			? { href: '/dashboard', label: 'Mes réunions', navLabel: 'Mes réunions' }
 			: user?.role === 'parent'
-				? { href: '/mes-reservations', label: 'Mes réservations' }
-				: { href: '/sign-up', label: 'Je crée mes créneaux' }
+				? { href: '/mes-reservations', label: 'Mes réservations', navLabel: 'Mes réservations' }
+				: { href: '/sign-up', label: 'Je crée mes créneaux', navLabel: 'Enseignant·es' }
 	const space = user ? { href: '/espace', label: 'Mon espace' } : { href: '/sign-in', label: 'Se connecter' }
 
 	// La vidéo de fond est optionnelle : déposer public/landing/hero.mp4 suffit à l'activer
@@ -23,6 +23,7 @@ export default async function HomePage() {
 			<LandingHero
 				ctaHref={cta.href}
 				ctaLabel={cta.label}
+				navLabel={cta.navLabel}
 				spaceHref={space.href}
 				spaceLabel={space.label}
 				videoSrc={videoSrc}

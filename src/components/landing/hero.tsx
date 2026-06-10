@@ -88,19 +88,22 @@ function HeroBackground({ videoSrc }: { videoSrc?: string }) {
 export function LandingHero({
 	ctaHref,
 	ctaLabel,
+	navLabel,
 	spaceHref,
 	spaceLabel,
 	videoSrc,
 }: {
 	ctaHref: string
 	ctaLabel: string
+	/** Libellé du lien central de la nav, adapté au rôle (Enseignant·es / Mes réunions / Mes réservations) */
+	navLabel: string
 	spaceHref: string
 	spaceLabel: string
 	videoSrc?: string
 }) {
 	const navItems = [
 		{ label: 'Fonctionnement', href: '#fonctionnement' },
-		{ label: 'Enseignant·es', href: ctaHref },
+		{ label: navLabel, href: ctaHref },
 		{ label: spaceLabel, href: spaceHref },
 	]
 

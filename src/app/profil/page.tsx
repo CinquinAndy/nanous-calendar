@@ -1,8 +1,10 @@
+import { UserProfile } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { ProfileForm } from '@/components/profile/profile-form'
 import { Header } from '@/components/shared/header'
 import { PageHeader } from '@/components/shared/page-header'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ensureUser } from '@/lib/users'
 
 export const metadata = { title: 'Mon profil' }
@@ -19,20 +21,46 @@ export default async function ProfilePage() {
 				<PageHeader
 					kicker="Mon compte"
 					title="Mon profil"
+					description="Vos coordonnées pour les rendez-vous, et la gestion de votre compte."
 					action={<Badge variant="secondary">{user.role === 'teacher' ? 'Enseignant·e' : 'Parent'}</Badge>}
 				/>
-				<ProfileForm
-					initial={{
-						firstName: user.first_name,
-						lastName: user.last_name,
-						contactEmail: user.contact_email,
-						accountEmail: user.email,
-					}}
-				/>
-				<p className="text-muted-foreground text-xs">
-					Pour changer votre email de connexion ou votre mot de passe, utilisez le menu de votre avatar en haut à
-					droite.
-				</p>
+
+				<Card>
+					<CardHeader>
+						<CardTitle>Mes coordonnées</CardTitle>
+						<CardDescription>
+							Utilisées sur les pages de réservation et dans les emails de confirmation.
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<ProfileForm
+							initial={{
+								firstName: user.first_name,
+								lastName: user.last_name,
+								contactEmail: user.contact_email,
+								accountEmail: user.email,
+							}}
+						/>
+					</CardContent>
+				</Card>
+
+				<section className="space-y-3">
+					<div className="space-y-1">
+						<h2 className="font-medium text-lg">Compte &amp; sécurité</h2>
+						<p className="text-muted-foreground text-sm">
+							Email de connexion, mot de passe, appareils connectés et suppression du compte.
+						</p>
+					</div>
+					<UserProfile
+						routing="hash"
+						appearance={{
+							elements: {
+								rootBox: 'w-full',
+								cardBox: 'w-full max-w-full rounded-xl border border-border shadow-depth',
+							},
+						}}
+					/>
+				</section>
 			</main>
 		</>
 	)
