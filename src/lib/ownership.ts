@@ -1,6 +1,6 @@
 import 'server-only'
 import type PocketBase from 'pocketbase'
-import { ClientResponseError } from 'pocketbase'
+import { isPbError } from '@/lib/pb-errors'
 import { ensureUser } from '@/lib/users'
 import type { EventRecord, UserRecord } from '@/types'
 
@@ -17,7 +17,7 @@ export async function getOwnedEvent(pb: PocketBase, eventId: string, teacherId: 
 		const event = await pb.collection('events').getOne<EventRecord>(eventId)
 		return event.teacher === teacherId ? event : null
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) return null
+		if (isPbError(err, 404)) return null
 		throw err
 	}
 }

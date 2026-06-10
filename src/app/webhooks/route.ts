@@ -45,7 +45,19 @@ export async function POST(req: NextRequest) {
 						role: payload.role || existing.role,
 					})
 				} else {
-					await pb.collection('users').create(payload)
+					try {
+						await pb.collection('users').create(payload)
+					} catch {
+						// Course avec ensureUser (record créé entre notre lookup et notre create) :
+						// on bascule en mise à jour du record gagnant.
+						const winner = await pb
+							.collection('users')
+							.getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: data.id }))
+							.catch(() => null)
+						if (winner) {
+							await pb.collection('users').update(winner.id, { ...payload, role: payload.role || winner.role })
+						}
+					}
 				}
 				break
 			}

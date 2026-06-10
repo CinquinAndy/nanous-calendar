@@ -2,9 +2,9 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 import { getOwnedEvent, requireTeacher } from '@/lib/ownership'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { randomSuffix, slugify } from '@/lib/slug'
@@ -49,7 +49,7 @@ export async function createEvent(_prev: { error: string } | null, formData: For
 			})
 		} catch (err) {
 			// Collision de slug (index unique) → on retente avec un suffixe
-			if (!(err instanceof ClientResponseError && err.status === 400)) throw err
+			if (!isPbError(err, 400)) throw err
 		}
 	}
 	if (!record) return { error: 'Impossible de créer la réunion, réessayez.' }

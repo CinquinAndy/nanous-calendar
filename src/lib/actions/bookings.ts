@@ -1,10 +1,10 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 import { toDate } from '@/lib/datetime'
 import { sendBookingConfirmation, sendTeacherBookingNotification } from '@/lib/email'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { ensureUser } from '@/lib/users'
@@ -44,7 +44,7 @@ export async function createBooking(
 		slot = await pb.collection('slots').getOne<SlotRecord>(slotId)
 		event = await pb.collection('events').getOne<EventRecord>(slot.event)
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) {
+		if (isPbError(err, 404)) {
 			return { ok: false, error: 'Ce créneau n’existe plus.' }
 		}
 		throw err
@@ -92,7 +92,7 @@ export async function createBooking(
 		})
 	} catch (err) {
 		// Index unique partiel : course avec une autre réservation du même parent
-		if (err instanceof ClientResponseError && err.status === 400) {
+		if (isPbError(err, 400)) {
 			return { ok: false, error: 'Vous avez déjà un rendez-vous pour cette réunion.' }
 		}
 		throw err
@@ -143,7 +143,7 @@ export async function cancelBooking(bookingId: string): Promise<ActionResult> {
 	try {
 		booking = await pb.collection('bookings').getOne<BookingRecord>(bookingId, { expand: 'event' })
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) {
+		if (isPbError(err, 404)) {
 			return { ok: false, error: 'Réservation introuvable.' }
 		}
 		throw err

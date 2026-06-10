@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { ClientResponseError } from 'pocketbase'
 import { buildIcs } from '@/lib/calendar'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
 import type { BookingRecord } from '@/types'
@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, ctx: RouteContext<'/api/ics/[bookin
 	try {
 		booking = await pb.collection('bookings').getOne<BookingRecord>(bookingId, { expand: 'slot,event' })
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) return new NextResponse('Not found', { status: 404 })
+		if (isPbError(err, 404)) return new NextResponse('Not found', { status: 404 })
 		throw err
 	}
 

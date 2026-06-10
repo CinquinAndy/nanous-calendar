@@ -1,10 +1,10 @@
 import { CalendarX2, GraduationCap, Lock, School } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { ClientResponseError } from 'pocketbase'
 import { CancelBookingButton } from '@/components/event-page/cancel-booking-button'
 import { type DayView, SlotPicker } from '@/components/event-page/slot-picker'
 import { EmptyState } from '@/components/shared/empty-state'
 import { formatParisDate, formatParisDateTime, formatParisTime, parisDayKey } from '@/lib/datetime'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
 import type { BookingRecord, EventRecord, SlotRecord, UserRecord } from '@/types'
@@ -36,7 +36,7 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 	try {
 		event = await pb.collection('events').getFirstListItem<EventRecord>(pb.filter('slug = {:slug}', { slug }))
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) notFound()
+		if (isPbError(err, 404)) notFound()
 		throw err
 	}
 

@@ -2,8 +2,8 @@ import 'server-only'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import type PocketBase from 'pocketbase'
-import { ClientResponseError } from 'pocketbase'
 import { cache } from 'react'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import type { UserRecord, UserRole } from '@/types'
 
@@ -11,7 +11,7 @@ export async function findUserByClerkId(pb: PocketBase, clerkId: string): Promis
 	try {
 		return await pb.collection('users').getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: clerkId }))
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) return null
+		if (isPbError(err, 404)) return null
 		throw err
 	}
 }
@@ -41,8 +41,11 @@ export const ensureUser = cache(async (): Promise<UserRecord | null> => {
 			role: (clerkUser.publicMetadata?.role as string) ?? '',
 		})
 	} catch (err) {
-		// Course avec le webhook user.created : l'index unique sur clerk_id a refusé le doublon
-		if (err instanceof ClientResponseError && err.status === 400) {
+		// Course avec le webhook user.created (ou un autre rendu concurrent) :
+		// l'index unique sur clerk_id a refusé le doublon. On retente la lecture
+		// avec un petit backoff, le temps que l'écriture gagnante soit visible.
+		for (const delayMs of [0, 100, 300, 800]) {
+			if (delayMs > 0) await new Promise(resolve => setTimeout(resolve, delayMs))
 			const record = await findUserByClerkId(pb, userId)
 			if (record) return record
 		}

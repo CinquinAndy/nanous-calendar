@@ -1,10 +1,10 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 import { parisDayKey } from '@/lib/datetime'
 import { getOwnedEvent, requireTeacher } from '@/lib/ownership'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { generateSlotTimes, MAX_SLOTS_PER_DAY, overlaps, SLOT_DURATIONS } from '@/lib/slots'
@@ -101,7 +101,7 @@ async function getOwnedSlot(
 		const event = await getOwnedEvent(pb, slot.event, teacherId)
 		return event ? { slot, event } : null
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) return null
+		if (isPbError(err, 404)) return null
 		throw err
 	}
 }

@@ -1,11 +1,11 @@
 import { CalendarPlus, CheckCircle2, Download, MailWarning } from 'lucide-react'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
-import { ClientResponseError } from 'pocketbase'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { googleCalendarUrl } from '@/lib/calendar'
 import { formatParisDateTime } from '@/lib/datetime'
+import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
 import type { BookingRecord } from '@/types'
@@ -26,7 +26,7 @@ export default async function ThanksPage({ params, searchParams }: PageProps<'/r
 	try {
 		booking = await pb.collection('bookings').getOne<BookingRecord>(bookingId, { expand: 'slot,event' })
 	} catch (err) {
-		if (err instanceof ClientResponseError && err.status === 404) notFound()
+		if (isPbError(err, 404)) notFound()
 		throw err
 	}
 	if (booking.parent !== user.id || booking.status !== 'confirmed') redirect(`/r/${slug}`)
