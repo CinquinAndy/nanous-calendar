@@ -151,7 +151,9 @@ export function SlotPicker({
 					</DrawerHeader>
 					<div className="space-y-4 px-4">
 						<div className="space-y-2">
-							<Label htmlFor="child-name">Prénom et nom de l’enfant *</Label>
+							<Label className="font-medium" htmlFor="child-name">
+								Prénom et nom de l’enfant *
+							</Label>
 							<Input
 								id="child-name"
 								value={childName}
@@ -162,7 +164,9 @@ export function SlotPicker({
 							/>
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="booking-comment">Commentaire (facultatif)</Label>
+							<Label className="font-medium" htmlFor="booking-comment">
+								Commentaire (facultatif)
+							</Label>
 							<Textarea
 								id="booking-comment"
 								value={comment}

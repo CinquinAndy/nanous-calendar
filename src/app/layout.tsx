@@ -66,7 +66,7 @@ export default function RootLayout({
 	return (
 		<ClerkProvider localization={frFR}>
 			<html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-				<body className="flex min-h-full flex-col">
+				<body className="flex min-h-full flex-col bg-grid">
 					{children}
 					<Footer />
 					<Toaster position="top-center" />

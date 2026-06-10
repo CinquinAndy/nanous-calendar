@@ -23,7 +23,7 @@ export default async function OnboardingPage({ searchParams }: PageProps<'/onboa
 
 			<form action={completeOnboarding.bind(null, 'parent', next)}>
 				<button type="submit" className="w-full text-left">
-					<Card className="transition-colors hover:border-primary hover:bg-accent active:scale-[0.99]">
+					<Card className="hover:-translate-y-1 shadow-depth transition-all duration-300 hover:border-primary/40 hover:shadow-depth-lg active:scale-[0.99]">
 						<CardHeader>
 							<div className="flex items-center gap-4">
 								<div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -41,7 +41,7 @@ export default async function OnboardingPage({ searchParams }: PageProps<'/onboa
 
 			<form action={completeOnboarding.bind(null, 'teacher', next)}>
 				<button type="submit" className="w-full text-left">
-					<Card className="transition-colors hover:border-primary hover:bg-accent active:scale-[0.99]">
+					<Card className="hover:-translate-y-1 shadow-depth transition-all duration-300 hover:border-primary/40 hover:shadow-depth-lg active:scale-[0.99]">
 						<CardHeader>
 							<div className="flex items-center gap-4">
 								<div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">

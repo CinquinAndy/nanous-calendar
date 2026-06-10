@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { updateProfile } from '@/lib/actions/profile'
 
 export function ProfileForm({
@@ -34,37 +35,63 @@ export function ProfileForm({
 	}
 
 	return (
-		<form onSubmit={submit} className="space-y-5">
-			<div className="grid grid-cols-2 gap-3">
-				<div className="space-y-2">
-					<Label htmlFor="first-name">Prénom</Label>
-					<Input id="first-name" value={firstName} onChange={e => setFirstName(e.target.value)} maxLength={80} />
+		<form onSubmit={submit}>
+			<div className="grid grid-cols-1 gap-5 sm:grid-cols-6">
+				<div className="col-span-full sm:col-span-3">
+					<Label htmlFor="first-name" className="font-medium">
+						Prénom<span className="text-destructive">*</span>
+					</Label>
+					<Input
+						id="first-name"
+						value={firstName}
+						onChange={e => setFirstName(e.target.value)}
+						maxLength={80}
+						autoComplete="given-name"
+						className="mt-2"
+					/>
 				</div>
-				<div className="space-y-2">
-					<Label htmlFor="last-name">Nom</Label>
-					<Input id="last-name" value={lastName} onChange={e => setLastName(e.target.value)} maxLength={80} />
+				<div className="col-span-full sm:col-span-3">
+					<Label htmlFor="last-name" className="font-medium">
+						Nom<span className="text-destructive">*</span>
+					</Label>
+					<Input
+						id="last-name"
+						value={lastName}
+						onChange={e => setLastName(e.target.value)}
+						maxLength={80}
+						autoComplete="family-name"
+						className="mt-2"
+					/>
+				</div>
+
+				<div className="col-span-full">
+					<Label htmlFor="contact-email" className="font-medium">
+						Email de contact
+					</Label>
+					<Input
+						id="contact-email"
+						type="email"
+						value={contactEmail}
+						onChange={e => setContactEmail(e.target.value)}
+						placeholder={initial.accountEmail}
+						autoComplete="email"
+						className="mt-2"
+					/>
+					<p className="mt-2 text-muted-foreground text-sm">
+						Utilisé pour les confirmations de rendez-vous. Laissez vide pour utiliser l’email de votre compte (
+						{initial.accountEmail}).
+					</p>
 				</div>
 			</div>
 
-			<div className="space-y-2">
-				<Label htmlFor="contact-email">Email de contact</Label>
-				<Input
-					id="contact-email"
-					type="email"
-					value={contactEmail}
-					onChange={e => setContactEmail(e.target.value)}
-					placeholder={initial.accountEmail}
-				/>
-				<p className="text-muted-foreground text-xs">
-					Utilisé pour les confirmations de rendez-vous. Laissez vide pour utiliser l’email de votre compte (
-					{initial.accountEmail}).
-				</p>
-			</div>
+			<Separator className="my-8" />
 
-			<Button type="submit" disabled={pending} className="w-full">
-				{pending ? <Loader2 className="size-4 animate-spin" /> : null}
-				Enregistrer
-			</Button>
+			<div className="flex items-center justify-end">
+				<Button type="submit" disabled={pending}>
+					{pending ? <Loader2 className="size-4 animate-spin" /> : null}
+					Enregistrer
+				</Button>
+			</div>
 		</form>
 	)
 }

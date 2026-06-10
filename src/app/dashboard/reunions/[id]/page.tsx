@@ -82,7 +82,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 			</div>
 
 			<Tabs defaultValue={slots.length === 0 ? 'creneaux' : 'planning'}>
-				<TabsList className="w-full">
+				<TabsList className="h-10 w-full p-1">
 					<TabsTrigger value="planning" className="flex-1">
 						Planning
 					</TabsTrigger>

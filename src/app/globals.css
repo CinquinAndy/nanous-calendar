@@ -128,3 +128,26 @@
 		@apply font-sans;
 	}
 }
+
+/* Grille discrète en fond de page (suit le thème via --foreground) */
+@utility bg-grid {
+	background-image:
+		linear-gradient(color-mix(in oklab, var(--foreground) 4%, transparent) 1px, transparent 1px),
+		linear-gradient(90deg, color-mix(in oklab, var(--foreground) 4%, transparent) 1px, transparent 1px);
+	background-size: 40px 40px;
+}
+
+/* Ombres de profondeur des cartes cliquables (lumière douce en haut, ombre portée en bas) */
+@utility shadow-depth {
+	box-shadow:
+		0 1px 2px rgb(0 0 0 / 0.05),
+		0 8px 24px -8px color-mix(in oklab, var(--primary) 14%, rgb(0 0 0 / 0.12)),
+		inset 0 1px 0 color-mix(in oklab, var(--background) 60%, transparent);
+}
+
+@utility shadow-depth-lg {
+	box-shadow:
+		0 2px 4px rgb(0 0 0 / 0.06),
+		0 20px 40px -12px color-mix(in oklab, var(--primary) 22%, rgb(0 0 0 / 0.18)),
+		inset 0 1px 0 color-mix(in oklab, var(--background) 60%, transparent);
+}

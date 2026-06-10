@@ -71,24 +71,30 @@ export function AddDaySheet({ eventId }: { eventId: string }) {
 
 				<div className="space-y-4 px-4">
 					<div className="space-y-2">
-						<Label htmlFor="day-date">Date</Label>
+						<Label className="font-medium" htmlFor="day-date">
+							Date
+						</Label>
 						<DatePicker id="day-date" value={date} onChange={setDate} />
 					</div>
 
 					<div className="grid grid-cols-2 gap-3">
 						<div className="space-y-2">
-							<Label htmlFor="day-start">Début</Label>
+							<Label className="font-medium" htmlFor="day-start">
+								Début
+							</Label>
 							<TimeSelect id="day-start" value={startTime} onChange={setStartTime} ariaLabel="Heure de début" />
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="day-end">Fin</Label>
+							<Label className="font-medium" htmlFor="day-end">
+								Fin
+							</Label>
 							<TimeSelect id="day-end" value={endTime} onChange={setEndTime} ariaLabel="Heure de fin" />
 						</div>
 					</div>
 
 					<div className="grid grid-cols-2 gap-3">
 						<div className="space-y-2">
-							<Label>Durée d’un rendez-vous</Label>
+							<Label className="font-medium">Durée d’un rendez-vous</Label>
 							<Select value={String(durationMin)} onValueChange={v => setDurationMin(Number(v))}>
 								<SelectTrigger>
 									<SelectValue />
@@ -103,7 +109,7 @@ export function AddDaySheet({ eventId }: { eventId: string }) {
 							</Select>
 						</div>
 						<div className="space-y-2">
-							<Label>Familles par créneau</Label>
+							<Label className="font-medium">Familles par créneau</Label>
 							<div className="flex items-center gap-2">
 								<Button
 									type="button"
