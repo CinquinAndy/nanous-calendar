@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { toDate } from '@/lib/datetime'
 import { sendBookingConfirmation, sendTeacherBookingNotification } from '@/lib/email'
 import { createPb } from '@/lib/pocketbase'
+import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { ensureUser } from '@/lib/users'
 import type { ActionResult, BookingRecord, EventRecord, SlotRecord, UserRecord } from '@/types'
 
@@ -28,6 +29,9 @@ export async function createBooking(
 ): Promise<ActionResult<{ bookingId: string; emailSent: boolean }>> {
 	const user = await ensureUser()
 	if (!user) return { ok: false, error: 'Connectez-vous pour réserver un créneau.' }
+	if (!rateLimit(`booking:${user.id}`, { limit: 8, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const parsed = bookingSchema.safeParse(input)
 	if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Données invalides' }
@@ -129,6 +133,9 @@ export async function createBooking(
 export async function cancelBooking(bookingId: string): Promise<ActionResult> {
 	const user = await ensureUser()
 	if (!user) return { ok: false, error: 'Connectez-vous pour annuler.' }
+	if (!rateLimit(`cancel:${user.id}`, { limit: 15, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const pb = createPb()
 

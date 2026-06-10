@@ -55,4 +55,17 @@ describe('buildIcsMulti', () => {
 	it('retourne null si la liste est vide', () => {
 		expect(buildIcsMulti([])).toBeNull()
 	})
+
+	it('échappe les CRLF du contenu utilisateur (pas d’injection d’en-têtes ICS)', () => {
+		const ics = buildIcs({
+			...input,
+			title: 'RDV Léo\r\nX-EVIL:injected',
+			description: 'ligne1\r\nMALICIOUS:1',
+			location: 'École\r\nORGANIZER:evil',
+		})
+		expect(ics).not.toBeNull()
+		expect(/^X-EVIL/m.test(ics ?? '')).toBe(false)
+		expect(/^MALICIOUS/m.test(ics ?? '')).toBe(false)
+		expect(/^ORGANIZER/m.test(ics ?? '')).toBe(false)
+	})
 })

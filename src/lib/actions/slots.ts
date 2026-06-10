@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { parisDayKey } from '@/lib/datetime'
 import { getOwnedEvent, requireTeacher } from '@/lib/ownership'
 import { createPb } from '@/lib/pocketbase'
+import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { generateSlotTimes, MAX_SLOTS_PER_DAY, overlaps, SLOT_DURATIONS } from '@/lib/slots'
 import type { ActionResult, BookingRecord, EventRecord, SlotRecord } from '@/types'
 
@@ -42,6 +43,10 @@ export async function createSlotsForDay(
 ): Promise<ActionResult<{ count: number }>> {
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
+
+	if (!rateLimit(`slots-create:${user.id}`, { limit: 10, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const parsed = daySchema.safeParse(input)
 	if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Données invalides' }
@@ -105,6 +110,10 @@ export async function updateSlotCapacity(slotId: string, capacity: number): Prom
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
 
+	if (!rateLimit(`slot-edit:${user.id}`, { limit: 40, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
+
 	const parsed = z.number().int().min(1).max(20).safeParse(capacity)
 	if (!parsed.success) return { ok: false, error: 'Capacité invalide (entre 1 et 20).' }
 
@@ -125,6 +134,9 @@ export async function updateSlotCapacity(slotId: string, capacity: number): Prom
 export async function deleteSlot(slotId: string): Promise<ActionResult> {
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
+	if (!rateLimit(`slot-edit:${user.id}`, { limit: 40, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const pb = createPb()
 	const owned = await getOwnedSlot(pb, slotId, user.id)
@@ -148,6 +160,9 @@ export async function deleteDay(
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
 
+	if (!rateLimit(`slots-create:${user.id}`, { limit: 10, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(dayKey)) return { ok: false, error: 'Journée invalide.' }
 
 	const pb = createPb()

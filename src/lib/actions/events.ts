@@ -6,6 +6,7 @@ import { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 import { getOwnedEvent, requireTeacher } from '@/lib/ownership'
 import { createPb } from '@/lib/pocketbase'
+import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { randomSuffix, slugify } from '@/lib/slug'
 import type { ActionResult, EventRecord } from '@/types'
 
@@ -18,6 +19,9 @@ const eventSchema = z.object({
 export async function createEvent(_prev: { error: string } | null, formData: FormData): Promise<{ error: string }> {
 	const user = await requireTeacher()
 	if (!user) redirect('/sign-in')
+	if (!rateLimit(`event-create:${user.id}`, { limit: 5, windowMs: 60_000 })) {
+		return { error: RATE_LIMIT_MESSAGE }
+	}
 
 	const parsed = eventSchema.safeParse({
 		title: formData.get('title'),
@@ -65,6 +69,10 @@ export async function updateEvent(
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
 
+	if (!rateLimit(`event-update:${user.id}`, { limit: 20, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
+
 	const parsed = updateSchema.safeParse(input)
 	if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Données invalides' }
 
@@ -81,6 +89,9 @@ export async function updateEvent(
 export async function deleteEvent(eventId: string): Promise<ActionResult> {
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
+	if (!rateLimit(`event-delete:${user.id}`, { limit: 10, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const pb = createPb()
 	const event = await getOwnedEvent(pb, eventId, user.id)

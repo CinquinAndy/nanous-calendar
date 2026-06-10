@@ -4,13 +4,18 @@ import { auth, clerkClient } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { createPb } from '@/lib/pocketbase'
+import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
 import { ensureUser } from '@/lib/users'
 import type { ActionResult, UserRole } from '@/types'
 
 const roleSchema = z.enum(['teacher', 'parent'])
+// Chemin relatif interne uniquement : refuse //host, /\host (les navigateurs
+// traitent \ comme /) et tout caractère de contrôle → pas d'open redirect.
 const nextSchema = z
 	.string()
-	.regex(/^\/(?!\/)/)
+	.max(300)
+	.regex(/^\/(?![/\\])[\x20-\x7E]*$/)
+	.refine(v => !v.includes('\\'), 'Chemin invalide')
 	.optional()
 
 /** Choix du rôle à l'inscription. Écrit dans Clerk (publicMetadata) et dans le miroir PocketBase. */
@@ -54,6 +59,9 @@ export async function updateProfile(input: {
 
 	const user = await ensureUser()
 	if (!user) return { ok: false, error: 'Vous devez être connecté·e.' }
+	if (!rateLimit(`profile:${user.id}`, { limit: 10, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
 
 	const pb = createPb()
 	await pb.collection('users').update(user.id, {
