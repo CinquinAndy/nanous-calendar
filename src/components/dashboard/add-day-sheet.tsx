@@ -4,9 +4,10 @@ import { CalendarPlus, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { DatePicker } from '@/components/shared/date-picker'
+import { TimeSelect } from '@/components/shared/time-select'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
@@ -71,17 +72,17 @@ export function AddDaySheet({ eventId }: { eventId: string }) {
 				<div className="space-y-4 px-4">
 					<div className="space-y-2">
 						<Label htmlFor="day-date">Date</Label>
-						<Input id="day-date" type="date" value={date} onChange={e => setDate(e.target.value)} />
+						<DatePicker id="day-date" value={date} onChange={setDate} />
 					</div>
 
 					<div className="grid grid-cols-2 gap-3">
 						<div className="space-y-2">
 							<Label htmlFor="day-start">Début</Label>
-							<Input id="day-start" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+							<TimeSelect id="day-start" value={startTime} onChange={setStartTime} ariaLabel="Heure de début" />
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="day-end">Fin</Label>
-							<Input id="day-end" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+							<TimeSelect id="day-end" value={endTime} onChange={setEndTime} ariaLabel="Heure de fin" />
 						</div>
 					</div>
 
