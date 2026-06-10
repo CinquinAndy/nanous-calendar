@@ -16,12 +16,41 @@ const geistMono = Geist_Mono({
 	subsets: ['latin'],
 })
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://maitresse-nanou.fr'
+
 export const metadata: Metadata = {
+	metadataBase: new URL(appUrl),
 	title: {
-		default: "Nanou's Calendar",
+		default: "Nanou's Calendar — Rendez-vous parents-profs gratuits et simples",
 		template: "%s · Nanou's Calendar",
 	},
-	description: 'Réservez simplement vos rendez-vous parents-profs.',
+	description:
+		'Application gratuite et sans publicité pour organiser les rendez-vous parents-professeurs : l’enseignant·e crée ses créneaux, partage un lien, les familles réservent en une minute et reçoivent une confirmation par email avec ajout au calendrier.',
+	keywords: [
+		'rendez-vous parents profs',
+		'réunion parents professeurs',
+		'prise de rendez-vous école',
+		'créneaux rendez-vous enseignant',
+		'application gratuite école',
+		'alternative framadate rendez-vous',
+		'planning rendez-vous parents',
+	],
+	openGraph: {
+		type: 'website',
+		locale: 'fr_FR',
+		siteName: "Nanou's Calendar",
+		title: "Nanou's Calendar — Rendez-vous parents-profs gratuits et simples",
+		description:
+			'L’enseignant·e crée ses créneaux et partage un lien ; les familles réservent en une minute. Gratuit, sans publicité, sans prise de tête.',
+		url: appUrl,
+	},
+	twitter: {
+		card: 'summary_large_image',
+	},
+	robots: {
+		index: true,
+		follow: true,
+	},
 }
 
 export const viewport: Viewport = {

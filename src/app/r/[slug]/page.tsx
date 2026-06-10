@@ -15,11 +15,17 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: PageProps<'/r/[slug]'>) {
 	const { slug } = await params
 	const pb = createPb()
+	// Pages partagées par lien aux familles : pas destinées aux moteurs de recherche
+	const robots = { index: false, follow: false }
 	try {
 		const event = await pb.collection('events').getFirstListItem<EventRecord>(pb.filter('slug = {:slug}', { slug }))
-		return { title: event.title, description: 'Réservez votre créneau de rendez-vous.' }
+		return {
+			title: event.title,
+			description: `Réservez votre créneau de rendez-vous${event.school ? ` — ${event.school}` : ''}. Choisissez un horaire, c'est confirmé par email en une minute.`,
+			robots,
+		}
 	} catch {
-		return { title: 'Réunion' }
+		return { title: 'Réunion', robots }
 	}
 }
 

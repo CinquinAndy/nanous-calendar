@@ -1,8 +1,13 @@
 import { SignIn } from '@clerk/nextjs'
 
+export const metadata = {
+	title: 'Se connecter',
+	description: 'Connectez-vous à votre compte Nanou’s Calendar pour gérer vos créneaux ou vos réservations.',
+}
+
 export default function SignInPage() {
 	return (
-		<main className="flex flex-1 items-center justify-center p-4">
+		<main className="flex flex-1 items-center justify-center px-4 py-12">
 			<SignIn />
 		</main>
 	)

@@ -9,7 +9,7 @@ header, à me signaler une fois le fichier en place) :
 | Image carte 001 (créneaux) | `public/landing/step-1.png` | PNG fond transparent, ~1000×1000 |
 | Image carte 002 (partage) | `public/landing/step-2.png` | PNG fond transparent, ~1000×1000 |
 | Image carte 003 (familles) | `public/landing/step-3.png` | PNG fond transparent, ~1000×1000 |
-| Favicon / icône d'app | `src/app/icon.png` | PNG **512×512**, fond transparent (Next génère les favicons) |
+| Favicon / icône d'app | ✅ déjà en place (`src/app/icon.svg`, calendrier-cœur du header) — `src/app/icon.png` Gemini = optionnel | PNG **512×512** si tu veux le remplacer |
 | Icône Apple (écran d'accueil) | `src/app/apple-icon.png` | PNG **180×180**, fond PLEIN (pas de transparence, coins carrés) |
 | Logo complet (header, emails) | `public/landing/logo.png` | PNG fond transparent, ~1200 de large |
 | Image de partage (OG) | `src/app/opengraph-image.png` | PNG/JPG **1200×630** exactement |
