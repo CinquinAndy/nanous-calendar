@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { ClientResponseError } from 'pocketbase'
 import { z } from 'zod'
 import { toDate } from '@/lib/datetime'
-import { sendBookingConfirmation } from '@/lib/email'
+import { sendBookingConfirmation, sendTeacherBookingNotification } from '@/lib/email'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
 import type { ActionResult, BookingRecord, EventRecord, SlotRecord, UserRecord } from '@/types'
@@ -107,20 +107,17 @@ export async function createBooking(
 		return { ok: false, error: 'Ce créneau vient d’être complété par une autre famille, choisissez-en un autre.' }
 	}
 
-	// Email non bloquant
+	// Emails non bloquants : confirmation au parent + notification à la prof
 	let emailSent = false
 	try {
 		const teacher = await pb.collection('users').getOne<UserRecord>(event.teacher)
-		emailSent = await sendBookingConfirmation({
-			parent: user,
-			teacher,
-			event,
-			slot,
-			childName: parsed.data.childName,
-			bookingId: booking.id,
-		})
+		const common = { parent: user, teacher, event, slot, childName: parsed.data.childName, bookingId: booking.id }
+		;[emailSent] = await Promise.all([
+			sendBookingConfirmation(common),
+			sendTeacherBookingNotification({ ...common, comment: parsed.data.comment }),
+		])
 	} catch (err) {
-		console.error('Email de confirmation non envoyé:', err)
+		console.error('Emails de confirmation non envoyés:', err)
 	}
 
 	revalidatePath(`/r/${event.slug}`)

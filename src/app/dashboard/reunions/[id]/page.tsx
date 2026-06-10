@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarX2, ClipboardList } from 'lucide-react'
+import { ArrowLeft, CalendarArrowDown, CalendarX2, ClipboardList } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { AddDaySheet } from '@/components/dashboard/add-day-sheet'
@@ -99,52 +99,75 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 							description="Les rendez-vous pris par les familles apparaîtront ici, créneau par créneau."
 						/>
 					) : (
-						Array.from(days.entries()).map(([dayKey, daySlots]) => {
-							const dayBookings = daySlots.flatMap(s => bookingsBySlot.get(s.id) ?? [])
-							if (dayBookings.length === 0) return null
-							return (
-								<section key={dayKey} className="space-y-2">
-									<h2 className="font-medium capitalize">{formatParisDate(daySlots[0].starts_at)}</h2>
-									<div className="space-y-2">
-										{daySlots.map(slot => {
-											const slotBookings = bookingsBySlot.get(slot.id) ?? []
-											if (slotBookings.length === 0) return null
-											return (
-												<div key={slot.id} className="rounded-lg border p-3">
-													<p className="font-medium tabular-nums">
-														{formatParisTime(slot.starts_at)} – {formatParisTime(slot.ends_at)}
-													</p>
-													<ul className="mt-2 space-y-2">
-														{slotBookings.map(booking => (
-															<li
-																key={booking.id}
-																className="flex items-start justify-between gap-2 rounded-md bg-muted/50 px-3 py-2 text-sm"
-															>
-																<div className="min-w-0">
-																	<p className="font-medium">{booking.child_name}</p>
-																	<p className="text-muted-foreground text-xs">
-																		{[booking.expand?.parent?.first_name, booking.expand?.parent?.last_name]
-																			.filter(Boolean)
-																			.join(' ') || 'Parent'}
-																		{booking.expand?.parent
-																			? ` · ${booking.expand.parent.contact_email || booking.expand.parent.email}`
-																			: ''}
-																	</p>
-																	{booking.comment ? (
-																		<p className="mt-1 text-muted-foreground">{booking.comment}</p>
-																	) : null}
-																</div>
-																<CancelBookingButton bookingId={booking.id} label="Annuler" variant="ghost" />
-															</li>
-														))}
-													</ul>
-												</div>
-											)
-										})}
-									</div>
-								</section>
-							)
-						})
+						<>
+							<div className="space-y-2 rounded-lg border bg-muted/40 p-3">
+								<Button asChild variant="outline" className="w-full">
+									<a href={`/api/ics/event/${event.id}`}>
+										<CalendarArrowDown className="size-4" />
+										Tout ajouter à mon calendrier (.ics)
+									</a>
+								</Button>
+								<p className="text-muted-foreground text-xs">
+									Tous les rendez-vous en un seul fichier, à ouvrir dans Google / Apple Calendar. Ré-importer le même
+									fichier <strong>met à jour</strong> les rendez-vous sans créer de doublons, et ils sont suffixés «
+									[Nanou] » pour les retrouver (ou les supprimer) facilement.
+								</p>
+							</div>
+							{Array.from(days.entries()).map(([dayKey, daySlots]) => {
+								const dayBookings = daySlots.flatMap(s => bookingsBySlot.get(s.id) ?? [])
+								if (dayBookings.length === 0) return null
+								return (
+									<section key={dayKey} className="space-y-2">
+										<div className="flex items-center justify-between gap-2">
+											<h2 className="font-medium capitalize">{formatParisDate(daySlots[0].starts_at)}</h2>
+											<Button asChild variant="ghost" size="sm">
+												<a href={`/api/ics/event/${event.id}?day=${dayKey}`}>
+													<CalendarArrowDown className="size-3.5" />
+													Journée .ics
+												</a>
+											</Button>
+										</div>
+										<div className="space-y-2">
+											{daySlots.map(slot => {
+												const slotBookings = bookingsBySlot.get(slot.id) ?? []
+												if (slotBookings.length === 0) return null
+												return (
+													<div key={slot.id} className="rounded-lg border p-3">
+														<p className="font-medium tabular-nums">
+															{formatParisTime(slot.starts_at)} – {formatParisTime(slot.ends_at)}
+														</p>
+														<ul className="mt-2 space-y-2">
+															{slotBookings.map(booking => (
+																<li
+																	key={booking.id}
+																	className="flex items-start justify-between gap-2 rounded-md bg-muted/50 px-3 py-2 text-sm"
+																>
+																	<div className="min-w-0">
+																		<p className="font-medium">{booking.child_name}</p>
+																		<p className="text-muted-foreground text-xs">
+																			{[booking.expand?.parent?.first_name, booking.expand?.parent?.last_name]
+																				.filter(Boolean)
+																				.join(' ') || 'Parent'}
+																			{booking.expand?.parent
+																				? ` · ${booking.expand.parent.contact_email || booking.expand.parent.email}`
+																				: ''}
+																		</p>
+																		{booking.comment ? (
+																			<p className="mt-1 text-muted-foreground">{booking.comment}</p>
+																		) : null}
+																	</div>
+																	<CancelBookingButton bookingId={booking.id} label="Annuler" variant="ghost" />
+																</li>
+															))}
+														</ul>
+													</div>
+												)
+											})}
+										</div>
+									</section>
+								)
+							})}
+						</>
 					)}
 				</TabsContent>
 

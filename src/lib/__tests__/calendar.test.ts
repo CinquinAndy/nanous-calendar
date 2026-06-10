@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { buildIcs, googleCalendarUrl } from '@/lib/calendar'
+import { buildIcs, buildIcsMulti, googleCalendarUrl } from '@/lib/calendar'
 
 const input = {
 	title: 'Rendez-vous parents-profs',
@@ -32,5 +32,27 @@ describe('buildIcs', () => {
 		expect(ics).toContain('UID:booking123@maitresse-nanou.fr')
 		expect(ics).toContain('DTSTART:20260612T150000Z')
 		expect(ics).toContain('SUMMARY:Rendez-vous parents-profs')
+	})
+
+	it('inclut une SEQUENCE croissante avec la date de modification (ré-import = mise à jour)', () => {
+		const ics = buildIcs({ ...input, updatedIso: '2026-06-10T10:00:00.000Z' })
+		expect(ics).toContain('SEQUENCE:')
+	})
+})
+
+describe('buildIcsMulti', () => {
+	it('génère un fichier multi-événements avec un UID par réservation', () => {
+		const ics = buildIcsMulti([
+			input,
+			{ ...input, uid: 'booking456', startIso: '2026-06-12T15:15:00.000Z', endIso: '2026-06-12T15:30:00.000Z' },
+		])
+		expect(ics).toContain('UID:booking123@maitresse-nanou.fr')
+		expect(ics).toContain('UID:booking456@maitresse-nanou.fr')
+		expect((ics?.match(/BEGIN:VEVENT/g) ?? []).length).toBe(2)
+		expect((ics?.match(/BEGIN:VCALENDAR/g) ?? []).length).toBe(1)
+	})
+
+	it('retourne null si la liste est vide', () => {
+		expect(buildIcsMulti([])).toBeNull()
 	})
 })
