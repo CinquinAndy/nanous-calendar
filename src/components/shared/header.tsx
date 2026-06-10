@@ -28,7 +28,8 @@ export function Header() {
 						<Button asChild variant="ghost" size="sm">
 							<Link href="/profil">Profil</Link>
 						</Button>
-						<UserButton />
+						{/* "Gérer mon compte" renvoie vers /profil : tout se modifie au même endroit */}
+						<UserButton userProfileMode="navigation" userProfileUrl="/profil" />
 					</div>
 				</Show>
 			</div>
