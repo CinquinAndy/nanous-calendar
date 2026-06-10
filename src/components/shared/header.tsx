@@ -1,6 +1,7 @@
 import { Show, SignInButton, UserButton } from '@clerk/nextjs'
 import { CalendarHeart } from 'lucide-react'
 import Link from 'next/link'
+import { SpaceLink } from '@/components/shared/space-link'
 import { Button } from '@/components/ui/button'
 
 export function Header() {
@@ -22,9 +23,7 @@ export function Header() {
 					}
 				>
 					<div className="flex items-center gap-1">
-						<Button asChild variant="ghost" size="sm">
-							<Link href="/espace">Mon espace</Link>
-						</Button>
+						<SpaceLink />
 						<Button asChild variant="ghost" size="sm">
 							<Link href="/profil">Profil</Link>
 						</Button>

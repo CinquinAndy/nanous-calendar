@@ -13,7 +13,9 @@ export default async function HomePage() {
 			: user?.role === 'parent'
 				? { href: '/mes-reservations', label: 'Mes réservations', navLabel: 'Mes réservations' }
 				: { href: '/sign-up', label: 'Je crée mes créneaux', navLabel: 'Enseignant·es' }
-	const space = user ? { href: '/espace', label: 'Mon espace' } : { href: '/sign-in', label: 'Se connecter' }
+	const space = user
+		? { href: user.role === 'teacher' ? '/dashboard' : '/mes-reservations', label: 'Mon espace' }
+		: { href: '/sign-in', label: 'Se connecter' }
 
 	// La vidéo de fond est optionnelle : déposer public/landing/hero.mp4 suffit à l'activer
 	const videoSrc = existsSync(join(process.cwd(), 'public/landing/hero.mp4')) ? '/landing/hero.mp4' : undefined

@@ -3,6 +3,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import type PocketBase from 'pocketbase'
 import { ClientResponseError } from 'pocketbase'
+import { cache } from 'react'
 import { createPb } from '@/lib/pocketbase'
 import type { UserRecord, UserRole } from '@/types'
 
@@ -18,8 +19,9 @@ export async function findUserByClerkId(pb: PocketBase, clerkId: string): Promis
 /**
  * Retourne le user PocketBase du compte Clerk connecté, en le créant à la volée
  * si le webhook Clerk n'est pas encore passé. Retourne null si non connecté.
+ * Mémoïsé par requête (React cache) : layout + page = un seul appel PocketBase.
  */
-export async function ensureUser(): Promise<UserRecord | null> {
+export const ensureUser = cache(async (): Promise<UserRecord | null> => {
 	const { userId } = await auth()
 	if (!userId) return null
 
@@ -46,7 +48,7 @@ export async function ensureUser(): Promise<UserRecord | null> {
 		}
 		throw err
 	}
-}
+})
 
 /**
  * Garde de layout/page : exige un utilisateur connecté avec le rôle donné.
