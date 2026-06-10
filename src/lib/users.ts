@@ -1,9 +1,10 @@
 import 'server-only'
 import { auth, currentUser } from '@clerk/nextjs/server'
+import { redirect } from 'next/navigation'
 import type PocketBase from 'pocketbase'
 import { ClientResponseError } from 'pocketbase'
 import { createPb } from '@/lib/pocketbase'
-import type { UserRecord } from '@/types'
+import type { UserRecord, UserRole } from '@/types'
 
 export async function findUserByClerkId(pb: PocketBase, clerkId: string): Promise<UserRecord | null> {
 	try {
@@ -45,4 +46,16 @@ export async function ensureUser(): Promise<UserRecord | null> {
 		}
 		throw err
 	}
+}
+
+/**
+ * Garde de layout/page : exige un utilisateur connecté avec le rôle donné.
+ * Redirige vers sign-in, onboarding ou l'espace correspondant à son rôle.
+ */
+export async function requireRole(role: UserRole): Promise<UserRecord> {
+	const user = await ensureUser()
+	if (!user) redirect('/sign-in')
+	if (!user.role) redirect('/onboarding')
+	if (user.role !== role) redirect(user.role === 'teacher' ? '/dashboard' : '/mes-reservations')
+	return user
 }
