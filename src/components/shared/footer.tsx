@@ -5,7 +5,7 @@ export function Footer() {
 
 	return (
 		<footer className="border-t px-4 py-8">
-			<div className="mx-auto flex w-full max-w-5xl flex-col gap-4 font-mono text-muted-foreground text-xs sm:flex-row sm:items-end sm:justify-between">
+			<div className="mx-auto flex w-full max-w-2xl flex-col gap-4 font-mono text-muted-foreground text-xs sm:flex-row sm:items-end sm:justify-between">
 				<div className="space-y-1.5">
 					<p>© {year} Nanou&apos;s Calendar – Tous droits réservés</p>
 					<p>Rendez-vous parents-profs, simples et sans prise de tête</p>

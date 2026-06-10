@@ -106,7 +106,10 @@ export default async function MyBookingsPage() {
 									const slot = booking.expand!.slot!
 									const event = booking.expand!.event!
 									return (
-										<div key={booking.id} className="rounded-lg border border-dashed px-4 py-3 text-sm opacity-70">
+										<div
+											key={booking.id}
+											className="rounded-xl border border-dashed bg-card/70 px-4 py-3 text-sm backdrop-blur-sm"
+										>
 											<p className="font-medium">{event.title}</p>
 											<p className="text-muted-foreground capitalize">
 												{formatParisDateTime(slot.starts_at)} · {booking.child_name}

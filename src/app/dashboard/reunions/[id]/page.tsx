@@ -103,14 +103,14 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 						/>
 					) : (
 						<>
-							<div className="space-y-2 rounded-lg border bg-muted/40 p-3">
+							<div className="space-y-2 rounded-xl border bg-card/90 p-4 shadow-depth backdrop-blur-md">
 								<Button asChild variant="outline" className="w-full">
 									<a href={`/api/ics/event/${event.id}`}>
 										<CalendarArrowDown className="size-4" />
 										Tout ajouter à mon calendrier (.ics)
 									</a>
 								</Button>
-								<p className="text-muted-foreground text-xs">
+								<p className="text-muted-foreground text-sm">
 									Tous les rendez-vous en un seul fichier, à ouvrir dans Google / Apple Calendar. Ré-importer le même
 									fichier <strong>met à jour</strong> les rendez-vous sans créer de doublons, et ils sont suffixés «
 									{CALENDAR_TAG} » pour les retrouver (ou les supprimer) facilement.
@@ -135,7 +135,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 												const slotBookings = bookingsBySlot.get(slot.id) ?? []
 												if (slotBookings.length === 0) return null
 												return (
-													<div key={slot.id} className="rounded-lg border p-3">
+													<div key={slot.id} className="rounded-xl border bg-card/90 p-4 backdrop-blur-md">
 														<p className="font-medium tabular-nums">
 															{formatParisTime(slot.starts_at)} – {formatParisTime(slot.ends_at)}
 														</p>
@@ -143,11 +143,11 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 															{slotBookings.map(booking => (
 																<li
 																	key={booking.id}
-																	className="flex items-start justify-between gap-2 rounded-md bg-muted/50 px-3 py-2 text-sm"
+																	className="flex items-start justify-between gap-2 rounded-lg bg-muted px-3 py-2.5 text-sm"
 																>
 																	<div className="min-w-0">
 																		<p className="font-medium">{booking.child_name}</p>
-																		<p className="text-muted-foreground text-xs">
+																		<p className="text-muted-foreground text-sm">
 																			{[booking.expand?.parent?.first_name, booking.expand?.parent?.last_name]
 																				.filter(Boolean)
 																				.join(' ') || 'Parent'}

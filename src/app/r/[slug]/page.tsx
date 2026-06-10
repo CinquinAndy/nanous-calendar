@@ -116,7 +116,7 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 				</div>
 
 				{myBooking && mySlot ? (
-					<div className="space-y-3 rounded-xl border border-primary/30 bg-primary/5 p-4">
+					<div className="space-y-3 rounded-xl border border-primary/30 bg-card/90 p-4 shadow-depth backdrop-blur-md">
 						<p className="font-medium">
 							✅ Votre rendez-vous : <span className="capitalize">{formatParisDateTime(mySlot.starts_at)}</span>
 						</p>
@@ -143,7 +143,7 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 					<div className="space-y-3">
 						<h2 className="font-medium text-lg">Choisissez votre créneau</h2>
 						{!user ? (
-							<p className="rounded-lg bg-muted px-3 py-2 text-muted-foreground text-sm">
+							<p className="rounded-lg border bg-card/90 px-3 py-2.5 text-muted-foreground text-sm backdrop-blur-sm">
 								Vous pourrez créer un compte (1 minute) au moment de réserver.
 							</p>
 						) : null}

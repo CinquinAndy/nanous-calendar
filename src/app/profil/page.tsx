@@ -15,7 +15,7 @@ export default async function ProfilePage() {
 	return (
 		<>
 			<Header />
-			<main className="mx-auto w-full max-w-md flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
+			<main className="mx-auto w-full max-w-2xl flex-1 space-y-10 px-4 pt-8 pb-24 sm:pt-12">
 				<PageHeader
 					kicker="Mon compte"
 					title="Mon profil"

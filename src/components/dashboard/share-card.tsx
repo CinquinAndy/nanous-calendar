@@ -33,7 +33,12 @@ export function ShareCard({ url }: { url: string }) {
 			</CardHeader>
 			<CardContent className="space-y-3">
 				<div className="flex gap-2">
-					<Input readOnly value={url} className="font-mono text-xs" onFocus={e => e.currentTarget.select()} />
+					<Input
+						readOnly
+						value={url}
+						className="min-w-0 flex-1 font-mono text-xs"
+						onFocus={e => e.currentTarget.select()}
+					/>
 					<Button onClick={copy} size="icon" variant="outline" aria-label="Copier le lien">
 						{copied ? <Check className="size-4 text-primary" /> : <Copy className="size-4" />}
 					</Button>

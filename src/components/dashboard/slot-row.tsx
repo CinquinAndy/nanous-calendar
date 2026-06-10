@@ -47,12 +47,17 @@ export function SlotRow({
 	}
 
 	return (
-		<div className={cn('flex items-center justify-between gap-3 rounded-lg border px-3 py-2', isPast && 'opacity-50')}>
+		<div
+			className={cn(
+				'flex items-center justify-between gap-3 rounded-lg border bg-card/90 px-3 py-2 backdrop-blur-sm',
+				isPast && 'opacity-50'
+			)}
+		>
 			<div className="flex items-baseline gap-2">
 				<span className="font-medium tabular-nums">
 					{startLabel} – {endLabel}
 				</span>
-				<span className="text-muted-foreground text-xs">
+				<span className="text-muted-foreground text-sm">
 					{booked}/{capacity} réservé{booked > 1 ? 's' : ''}
 				</span>
 			</div>
