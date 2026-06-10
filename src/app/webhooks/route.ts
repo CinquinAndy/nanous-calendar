@@ -60,7 +60,10 @@ export async function POST(req: NextRequest) {
 						})
 						const winner = await pb
 							.collection('users')
-							.getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: data.id }))
+							.getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: data.id }), {
+								// contourne la mémoïsation fetch de Next (même URL que le lookup initial)
+								_fresh: Date.now().toString(),
+							})
 							.catch(() => null)
 						if (winner) {
 							await pb.collection('users').update(winner.id, { ...payload, role: payload.role || winner.role })

@@ -8,9 +8,14 @@ import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import type { UserRecord, UserRole } from '@/types'
 
-export async function findUserByClerkId(pb: PocketBase, clerkId: string): Promise<UserRecord | null> {
+export async function findUserByClerkId(pb: PocketBase, clerkId: string, fresh = false): Promise<UserRecord | null> {
 	try {
-		return await pb.collection('users').getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: clerkId }))
+		return await pb.collection('users').getFirstListItem<UserRecord>(pb.filter('clerk_id = {:id}', { id: clerkId }), {
+			// Next mémoïse les fetch GET identiques au sein d'un même rendu : sans
+			// paramètre unique, une relecture resservirait la réponse vide initiale
+			// au lieu d'interroger PocketBase (cause du crash de course à l'inscription).
+			...(fresh ? { _fresh: Date.now().toString() } : {}),
+		})
 	} catch (err) {
 		if (isPbError(err, 404)) return null
 		throw err
@@ -56,7 +61,7 @@ export const ensureUser = cache(async (): Promise<UserRecord | null> => {
 		})
 		for (const delayMs of [0, 100, 300, 800]) {
 			if (delayMs > 0) await new Promise(resolve => setTimeout(resolve, delayMs))
-			const record = await findUserByClerkId(pb, userId).catch(() => null)
+			const record = await findUserByClerkId(pb, userId, true).catch(() => null)
 			if (record) {
 				logInfo('ensureUser', 'récupération OK (record gagnant relu)', { clerkId: userId, afterMs: delayMs })
 				return record
