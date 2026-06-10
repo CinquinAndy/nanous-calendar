@@ -42,11 +42,13 @@ export const ensureUser = cache(async (): Promise<UserRecord | null> => {
 		})
 	} catch (err) {
 		// Course avec le webhook user.created (ou un autre rendu concurrent) :
-		// l'index unique sur clerk_id a refusé le doublon. On retente la lecture
-		// avec un petit backoff, le temps que l'écriture gagnante soit visible.
+		// l'index unique sur clerk_id a refusé le doublon. Quelle que soit la
+		// forme de l'erreur, on retente la lecture avec un petit backoff, le
+		// temps que l'écriture gagnante soit visible. On ne relance l'erreur
+		// que si le record n'existe vraiment pas.
 		for (const delayMs of [0, 100, 300, 800]) {
 			if (delayMs > 0) await new Promise(resolve => setTimeout(resolve, delayMs))
-			const record = await findUserByClerkId(pb, userId)
+			const record = await findUserByClerkId(pb, userId).catch(() => null)
 			if (record) return record
 		}
 		throw err
