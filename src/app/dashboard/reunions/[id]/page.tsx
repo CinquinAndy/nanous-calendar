@@ -11,6 +11,7 @@ import { EmptyState } from '@/components/shared/empty-state'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { CALENDAR_TAG } from '@/lib/calendar'
 import { formatParisDate, formatParisTime, parisDayKey, toDate } from '@/lib/datetime'
 import { env } from '@/lib/env'
 import { getOwnedEvent } from '@/lib/ownership'
@@ -110,7 +111,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 								<p className="text-muted-foreground text-xs">
 									Tous les rendez-vous en un seul fichier, à ouvrir dans Google / Apple Calendar. Ré-importer le même
 									fichier <strong>met à jour</strong> les rendez-vous sans créer de doublons, et ils sont suffixés «
-									[Nanou] » pour les retrouver (ou les supprimer) facilement.
+									{CALENDAR_TAG} » pour les retrouver (ou les supprimer) facilement.
 								</p>
 							</div>
 							{Array.from(days.entries()).map(([dayKey, daySlots]) => {

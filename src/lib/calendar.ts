@@ -5,7 +5,7 @@ import { toDate } from '@/lib/datetime'
  * Suffixe ajouté aux titres des événements exportés côté prof : permet de les
  * retrouver (et supprimer) facilement dans Google/Apple Calendar.
  */
-export const CALENDAR_TAG = '[Nanou]'
+export const CALENDAR_TAG = "[Nanou's Calend]"
 
 export type CalendarEventInput = {
 	title: string

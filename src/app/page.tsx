@@ -1,99 +1,71 @@
-import { CalendarCheck2, GraduationCap, Link2, MailCheck, Users } from 'lucide-react'
-import Link from 'next/link'
-import { Header } from '@/components/shared/header'
-import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { LandingHero } from '@/components/landing/hero'
 import { ensureUser } from '@/lib/users'
+
+const steps = [
+	{
+		number: '01',
+		title: 'Créez vos créneaux',
+		description:
+			'Choisissez vos journées, la durée des rendez-vous et le nombre de familles par créneau — différent chaque jour si besoin. Le jeudi 1 famille par créneau, le lundi 3 : c’est vous qui décidez.',
+		audience: 'Enseignant·es',
+	},
+	{
+		number: '02',
+		title: 'Partagez le lien',
+		description:
+			'Cahier de liaison, email ou message : un seul lien suffit pour toute la classe. Pas de compte à créer pour consulter les disponibilités.',
+		audience: 'Enseignant·es',
+	},
+	{
+		number: '03',
+		title: 'Les familles réservent',
+		description:
+			'Chaque famille choisit son horaire, indique le nom de l’enfant et reçoit la confirmation par email — avec l’ajout à Google Calendar ou Apple Calendar en un clic. Annulation possible à tout moment, la place se libère toute seule.',
+		audience: 'Familles',
+	},
+]
 
 export default async function HomePage() {
 	const user = await ensureUser()
 
+	const cta =
+		user?.role === 'teacher'
+			? { href: '/dashboard', label: 'Mes réunions' }
+			: user?.role === 'parent'
+				? { href: '/mes-reservations', label: 'Mes réservations' }
+				: { href: '/sign-up', label: 'Je crée mes créneaux' }
+	const space = user ? { href: '/espace', label: 'Mon espace' } : { href: '/sign-in', label: 'Se connecter' }
+
 	return (
 		<>
-			<Header />
-			<main className="mx-auto w-full max-w-2xl flex-1 space-y-12 p-4 pt-10 pb-24">
-				<section className="space-y-4 text-center">
-					<span className="inline-flex items-center gap-1.5 rounded-full border bg-muted px-3 py-1 text-muted-foreground text-xs">
-						<CalendarCheck2 className="size-3.5" />
-						Rendez-vous parents-profs, sans prise de tête
-					</span>
-					<h1 className="text-balance font-semibold text-3xl tracking-tight sm:text-4xl">
-						Réservez votre créneau en <span className="text-primary">moins d’une minute</span>
-					</h1>
-					<p className="mx-auto max-w-md text-pretty text-muted-foreground">
-						L’enseignant·e crée ses créneaux et partage un lien. Les familles choisissent leur horaire et reçoivent une
-						confirmation par email, avec l’ajout au calendrier en un clic.
-					</p>
+			<LandingHero ctaHref={cta.href} ctaLabel={cta.label} spaceHref={space.href} spaceLabel={space.label} />
 
-					<div className="flex flex-col gap-2 pt-2 sm:flex-row sm:justify-center">
-						{user?.role === 'teacher' ? (
-							<Button asChild size="lg">
-								<Link href="/dashboard">
-									<GraduationCap className="size-4" />
-									Accéder à mes réunions
-								</Link>
-							</Button>
-						) : user?.role === 'parent' ? (
-							<Button asChild size="lg">
-								<Link href="/mes-reservations">
-									<Users className="size-4" />
-									Voir mes réservations
-								</Link>
-							</Button>
-						) : (
-							<Button asChild size="lg">
-								<Link href="/sign-up">
-									<GraduationCap className="size-4" />
-									Je suis enseignant·e — je crée mes créneaux
-								</Link>
-							</Button>
-						)}
-					</div>
-					{!user ? (
-						<p className="text-muted-foreground text-sm">
-							Parent ? Ouvrez simplement le lien partagé par l’enseignant·e de votre enfant.
-						</p>
-					) : null}
-				</section>
+			<section id="fonctionnement" className="mx-auto w-full max-w-3xl scroll-mt-8 px-4 py-16 sm:py-24">
+				<div className="mb-10 flex items-end justify-between gap-4">
+					<h2 className="font-medium text-2xl tracking-tight sm:text-3xl">Comment ça marche&nbsp;?</h2>
+					<p className="text-muted-foreground text-sm">Trois étapes, pas une de plus.</p>
+				</div>
 
-				<section className="grid gap-3 sm:grid-cols-3">
-					<Card>
-						<CardHeader>
-							<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-								<CalendarCheck2 className="size-5" />
+				<ol>
+					{steps.map(step => (
+						<li key={step.number} className="grid grid-cols-12 gap-4 border-t py-8 last:border-b">
+							<div className="col-span-3 sm:col-span-2">
+								<span className="font-medium text-3xl text-primary tabular-nums sm:text-4xl">{step.number}</span>
 							</div>
-							<CardTitle className="text-base">1. Créez vos créneaux</CardTitle>
-							<CardDescription>
-								Choisissez vos journées, la durée des rendez-vous et le nombre de familles par créneau — différent
-								chaque jour si besoin.
-							</CardDescription>
-						</CardHeader>
-					</Card>
-					<Card>
-						<CardHeader>
-							<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-								<Link2 className="size-5" />
+							<div className="col-span-9 space-y-2 sm:col-span-7">
+								<h3 className="font-medium text-lg">{step.title}</h3>
+								<p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
 							</div>
-							<CardTitle className="text-base">2. Partagez le lien</CardTitle>
-							<CardDescription>
-								Cahier de liaison, email ou message : un seul lien suffit pour toute la classe.
-							</CardDescription>
-						</CardHeader>
-					</Card>
-					<Card>
-						<CardHeader>
-							<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-								<MailCheck className="size-5" />
+							<div className="col-span-12 sm:col-span-3 sm:text-right">
+								<span className="inline-block rounded-full border px-3 py-1 text-muted-foreground text-xs">
+									{step.audience}
+								</span>
 							</div>
-							<CardTitle className="text-base">3. Les familles réservent</CardTitle>
-							<CardDescription>
-								Confirmation par email avec ajout à Google Calendar et Apple Calendar. Annulation possible à tout
-								moment.
-							</CardDescription>
-						</CardHeader>
-					</Card>
-				</section>
-			</main>
+						</li>
+					))}
+				</ol>
+			</section>
+
 			<footer className="border-t py-6 text-center text-muted-foreground text-xs">
 				Nanou&apos;s Calendar · fait avec ❤️ pour les enseignant·es et les familles
 			</footer>
