@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# doublons locaux des assets (la version active est hero.mp4 / src/app/opengraph-image.jpg)
+public/landing/hero_old.mp4
+public/landing/hero (copy).mp4
+public/landing/opengraph-image.png
