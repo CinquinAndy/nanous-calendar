@@ -35,10 +35,6 @@ export default async function HomePage() {
 				</div>
 				<FeatureSteps />
 			</section>
-
-			<footer className="border-t py-6 text-center text-muted-foreground text-xs">
-				Nanou&apos;s Calendar · fait avec ❤️ pour les enseignant·es et les familles
-			</footer>
 		</>
 	)
 }

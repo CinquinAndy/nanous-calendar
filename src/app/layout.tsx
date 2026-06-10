@@ -2,6 +2,7 @@ import { frFR } from '@clerk/localizations'
 import { ClerkProvider } from '@clerk/nextjs'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { Footer } from '@/components/shared/footer'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
@@ -38,6 +39,7 @@ export default function RootLayout({
 			<html lang="fr" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
 				<body className="flex min-h-full flex-col">
 					{children}
+					<Footer />
 					<Toaster position="top-center" />
 				</body>
 			</html>

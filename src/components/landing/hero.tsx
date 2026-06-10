@@ -167,7 +167,7 @@ export function LandingHero({
 									</span>
 								</Link>
 								<p className="text-xs" style={{ color: 'rgba(225, 224, 204, 0.5)' }}>
-									* et fini Framadate. Parent ? Ouvrez simplement le lien partagé par l’enseignant·e.
+									* et fini les prises de têtes. Parent ? Ouvrez simplement le lien partagé par l’enseignant·e.
 								</p>
 							</motion.div>
 						</div>
