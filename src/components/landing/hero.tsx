@@ -66,10 +66,11 @@ function HeroBackground({ videoSrc }: { videoSrc?: string }) {
 				<div
 					className="absolute inset-0"
 					style={{
+						// Glow basé sur --primary : suit le thème shadcn/tweakcn
 						background: `
-							radial-gradient(110% 75% at 75% 0%, oklch(0.42 0.14 288 / 0.65), transparent 60%),
-							radial-gradient(80% 55% at 8% 95%, oklch(0.36 0.12 305 / 0.55), transparent 55%),
-							radial-gradient(60% 40% at 45% 55%, oklch(0.28 0.08 270 / 0.4), transparent 65%),
+							radial-gradient(110% 75% at 75% 0%, color-mix(in oklab, var(--primary) 60%, transparent), transparent 60%),
+							radial-gradient(80% 55% at 8% 95%, color-mix(in oklab, var(--primary) 45%, transparent), transparent 55%),
+							radial-gradient(60% 40% at 45% 55%, color-mix(in oklab, var(--primary) 25%, transparent), transparent 65%),
 							#0C0B10`,
 					}}
 				/>

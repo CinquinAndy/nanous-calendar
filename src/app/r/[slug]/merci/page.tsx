@@ -51,7 +51,7 @@ export default async function ThanksPage({ params, searchParams }: PageProps<'/r
 			<main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-4">
 				<div className="space-y-2 text-center">
 					<CheckCircle2 className="mx-auto size-12 text-primary" />
-					<h1 className="font-semibold text-2xl tracking-tight">Rendez-vous confirmé !</h1>
+					<h1 className="font-medium text-2xl tracking-tight">Rendez-vous confirmé !</h1>
 					<p className="text-muted-foreground">
 						Un email de confirmation vient de vous être envoyé avec tous les détails.
 					</p>

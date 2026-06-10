@@ -1,6 +1,7 @@
 import { CalendarPlus, ChevronRight, School } from 'lucide-react'
 import Link from 'next/link'
 import { EmptyState } from '@/components/shared/empty-state'
+import { Kicker } from '@/components/shared/kicker'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -21,7 +22,10 @@ export default async function DashboardPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between gap-4">
-				<h1 className="font-semibold text-2xl tracking-tight">Mes réunions</h1>
+				<div className="space-y-1">
+					<Kicker>Espace enseignant·e</Kicker>
+					<h1 className="font-medium text-2xl tracking-tight">Mes réunions</h1>
+				</div>
 				<Button asChild>
 					<Link href="/dashboard/nouvelle-reunion">
 						<CalendarPlus className="size-4" />

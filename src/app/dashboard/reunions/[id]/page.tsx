@@ -70,7 +70,7 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 				</Button>
 				<div className="flex items-start justify-between gap-3">
 					<div className="min-w-0 space-y-1">
-						<h1 className="font-semibold text-2xl tracking-tight">{event.title}</h1>
+						<h1 className="font-medium text-2xl tracking-tight">{event.title}</h1>
 						{event.school ? <p className="text-muted-foreground text-sm">{event.school}</p> : null}
 					</div>
 					<Badge variant={event.status === 'open' ? 'default' : 'secondary'} className="shrink-0">

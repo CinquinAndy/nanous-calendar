@@ -20,22 +20,19 @@ interface AnimatedFeatureCardProps extends Omit<HTMLMotionProps<'div'>, 'title'>
 	color: 'orange' | 'purple' | 'blue'
 }
 
+/*
+ * Les variantes dérivent des tokens du thème shadcn (--primary, --chart-*) :
+ * changer le thème (tweakcn) re-colore aussi ces cartes.
+ */
 const colorVariants = {
-	orange: {
-		'--feature-color': 'hsl(35, 91%, 55%)',
-		'--feature-color-light': 'hsl(41, 100%, 85%)',
-		'--feature-color-dark': 'hsl(24, 98%, 98%)',
-	},
-	purple: {
-		'--feature-color': 'hsl(262, 85%, 60%)',
-		'--feature-color-light': 'hsl(261, 100%, 87%)',
-		'--feature-color-dark': 'hsl(264, 100%, 98%)',
-	},
-	blue: {
-		'--feature-color': 'hsl(211, 100%, 60%)',
-		'--feature-color-light': 'hsl(210, 100%, 83%)',
-		'--feature-color-dark': 'hsl(216, 100%, 98%)',
-	},
+	purple: { '--feature-color': 'var(--primary)' },
+	orange: { '--feature-color': 'var(--chart-1)' },
+	blue: { '--feature-color': 'var(--chart-2)' },
+} as const
+
+const derivedColors = {
+	'--feature-color-light': 'color-mix(in oklab, var(--feature-color) 35%, var(--background))',
+	'--feature-color-dark': 'color-mix(in oklab, var(--feature-color) 10%, var(--background))',
 } as const
 
 export function AnimatedFeatureCard({
@@ -48,7 +45,7 @@ export function AnimatedFeatureCard({
 	color,
 	...props
 }: AnimatedFeatureCardProps) {
-	const cardStyle = colorVariants[color] as React.CSSProperties
+	const cardStyle = { ...colorVariants[color], ...derivedColors } as React.CSSProperties
 	const [imageFailed, setImageFailed] = React.useState(false)
 	const showImage = imageSrc && !imageFailed
 

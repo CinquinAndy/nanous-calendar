@@ -17,7 +17,7 @@ export default async function OnboardingPage({ searchParams }: PageProps<'/onboa
 	return (
 		<main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 p-4">
 			<div className="space-y-2 text-center">
-				<h1 className="font-semibold text-2xl tracking-tight">Bienvenue {user.first_name} 👋</h1>
+				<h1 className="font-medium text-2xl tracking-tight">Bienvenue {user.first_name} 👋</h1>
 				<p className="text-muted-foreground">Pour commencer, dites-nous qui vous êtes :</p>
 			</div>
 

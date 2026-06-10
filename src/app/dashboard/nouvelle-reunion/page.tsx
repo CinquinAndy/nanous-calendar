@@ -16,7 +16,7 @@ export default function NewEventPage() {
 					</Link>
 				</Button>
 				<div className="space-y-1">
-					<h1 className="font-semibold text-2xl tracking-tight">Nouvelle réunion</h1>
+					<h1 className="font-medium text-2xl tracking-tight">Nouvelle réunion</h1>
 					<p className="text-muted-foreground text-sm">
 						Décrivez la réunion, vous ajouterez ensuite vos créneaux de disponibilité.
 					</p>

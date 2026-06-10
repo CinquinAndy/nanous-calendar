@@ -1,6 +1,7 @@
 'use client'
 
 import { Check, Copy, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -43,10 +44,10 @@ export function ShareCard({ url }: { url: string }) {
 						Copier le lien
 					</Button>
 					<Button asChild variant="outline">
-						<a href={url} target="_blank" rel="noreferrer">
+						<Link href={url} target="_blank" rel="noreferrer">
 							<ExternalLink className="size-4" />
 							Voir la page
-						</a>
+						</Link>
 					</Button>
 				</div>
 			</CardContent>

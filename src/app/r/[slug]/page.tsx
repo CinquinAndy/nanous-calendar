@@ -5,6 +5,7 @@ import { CancelBookingButton } from '@/components/event-page/cancel-booking-butt
 import { type DayView, SlotPicker } from '@/components/event-page/slot-picker'
 import { EmptyState } from '@/components/shared/empty-state'
 import { Header } from '@/components/shared/header'
+import { Kicker } from '@/components/shared/kicker'
 import { formatParisDate, formatParisDateTime, formatParisTime, parisDayKey } from '@/lib/datetime'
 import { createPb } from '@/lib/pocketbase'
 import { ensureUser } from '@/lib/users'
@@ -81,7 +82,8 @@ export default async function EventPublicPage({ params }: PageProps<'/r/[slug]'>
 			<Header />
 			<main className="mx-auto w-full max-w-2xl flex-1 space-y-6 p-4 pb-24">
 				<div className="space-y-2">
-					<h1 className="font-semibold text-2xl tracking-tight">{event.title}</h1>
+					<Kicker>Réunion parents-profs</Kicker>
+					<h1 className="font-medium text-2xl tracking-tight">{event.title}</h1>
 					<div className="space-y-1 text-muted-foreground text-sm">
 						{teacherName ? (
 							<p className="flex items-center gap-1.5">
