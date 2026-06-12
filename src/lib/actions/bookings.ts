@@ -3,11 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { toDate } from '@/lib/datetime'
-import { sendBookingConfirmation, sendTeacherBookingNotification } from '@/lib/email'
+import { sendBookingConfirmation } from '@/lib/email'
 import { logInfo } from '@/lib/log'
 import { isPbError } from '@/lib/pb-errors'
 import { createPb } from '@/lib/pocketbase'
 import { RATE_LIMIT_MESSAGE, rateLimit } from '@/lib/rate-limit'
+import { queueTeacherBookingNotification } from '@/lib/teacher-notify'
 import { ensureUser } from '@/lib/users'
 import type { ActionResult, BookingRecord, EventRecord, SlotRecord, UserRecord } from '@/types'
 
@@ -113,15 +114,15 @@ export async function createBooking(
 		return { ok: false, error: 'Ce créneau vient d’être complété par une autre famille, choisissez-en un autre.' }
 	}
 
-	// Emails non bloquants : confirmation au parent + notification à la prof
+	// Emails non bloquants : confirmation immédiate au parent ; notification prof
+	// via la file anti-rafale (envoi immédiat si isolée, groupé si plusieurs
+	// familles réservent en même temps)
 	let emailSent = false
 	try {
 		const teacher = await pb.collection('users').getOne<UserRecord>(event.teacher)
 		const common = { parent: user, teacher, event, slot, childName: parsed.data.childName, bookingId: booking.id }
-		;[emailSent] = await Promise.all([
-			sendBookingConfirmation(common),
-			sendTeacherBookingNotification({ ...common, comment: parsed.data.comment }),
-		])
+		emailSent = await sendBookingConfirmation(common)
+		queueTeacherBookingNotification({ ...common, comment: parsed.data.comment })
 	} catch (err) {
 		console.error('Emails de confirmation non envoyés:', err)
 	}

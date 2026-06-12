@@ -2,6 +2,7 @@ import 'server-only'
 import { Resend } from 'resend'
 import BookingConfirmationEmail from '@/emails/booking-confirmation'
 import EventRecapEmail from '@/emails/event-recap'
+import TeacherBookingDigestEmail, { type DigestEntry } from '@/emails/teacher-booking-digest'
 import TeacherBookingNotificationEmail from '@/emails/teacher-booking-notification'
 import { buildIcs, CALENDAR_TAG, googleCalendarUrl } from '@/lib/calendar'
 import { formatParisDateTime } from '@/lib/datetime'
@@ -209,6 +210,47 @@ export async function sendEventRecap({
 		return true
 	} catch (err) {
 		console.error('Envoi du récapitulatif échoué:', err)
+		return false
+	}
+}
+
+/**
+ * Email groupé à la prof quand plusieurs familles réservent dans la même
+ * fenêtre (anti-rafale) : un seul email listant toutes les réservations.
+ * Ne lève jamais.
+ */
+export async function sendTeacherBookingDigest({
+	teacher,
+	event,
+	entries,
+}: {
+	teacher: UserRecord
+	event: EventRecord
+	entries: DigestEntry[]
+}): Promise<boolean> {
+	try {
+		const ccEmails = (event.notify_emails ?? []).slice(0, 5)
+		const resend = new Resend(env.RESEND_API_KEY)
+		const { error } = await resend.emails.send({
+			from: env.EMAIL_FROM,
+			to: teacher.contact_email || teacher.email,
+			cc: ccEmails.length > 0 ? ccEmails : undefined,
+			subject: `${entries.length} nouvelles réservations — ${event.title}`,
+			react: TeacherBookingDigestEmail({
+				teacherFirstName: teacher.first_name,
+				eventTitle: event.title,
+				school: event.school,
+				entries,
+				planningUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/reunions/${event.id}`,
+			}),
+		})
+		if (error) {
+			console.error('Envoi du digest prof échoué:', error)
+			return false
+		}
+		return true
+	} catch (err) {
+		console.error('Envoi du digest prof échoué:', err)
 		return false
 	}
 }
