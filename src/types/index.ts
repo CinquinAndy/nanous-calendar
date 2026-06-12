@@ -22,6 +22,8 @@ export type EventRecord = {
 	school: string
 	slug: string
 	status: EventStatus
+	/** Emails de suivi (max 5) : reçoivent les confirmations de RDV et le récapitulatif. */
+	notify_emails: string[] | null
 	created: string
 	updated: string
 }

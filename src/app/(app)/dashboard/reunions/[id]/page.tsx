@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation'
 import { AddDaySheet } from '@/components/dashboard/add-day-sheet'
 import { DeleteDayButton } from '@/components/dashboard/delete-day-button'
 import { EventActions } from '@/components/dashboard/event-actions'
+import { NotifyEmailsCard } from '@/components/dashboard/notify-emails-card'
+import { QrShareCard } from '@/components/dashboard/qr-share-card'
+import { SendRecapButton } from '@/components/dashboard/send-recap-button'
 import { ShareCard } from '@/components/dashboard/share-card'
 import { SlotRow } from '@/components/dashboard/slot-row'
 import { CancelBookingButton } from '@/components/event-page/cancel-booking-button'
@@ -115,6 +118,10 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 									fichier <strong>met à jour</strong> les rendez-vous sans créer de doublons, et ils sont suffixés «
 									{CALENDAR_TAG} » pour les retrouver (ou les supprimer) facilement.
 								</p>
+								<SendRecapButton eventId={event.id} />
+								<p className="text-muted-foreground text-xs">
+									Le récapitulatif est envoyé à votre adresse et aux emails de suivi (onglet Partager).
+								</p>
 							</div>
 							{Array.from(days.entries()).map(([dayKey, daySlots]) => {
 								const dayBookings = daySlots.flatMap(s => bookingsBySlot.get(s.id) ?? [])
@@ -214,6 +221,8 @@ export default async function EventDetailPage({ params }: PageProps<'/dashboard/
 
 				<TabsContent value="partager" className="space-y-4 pt-6">
 					<ShareCard url={shareUrl} />
+					<QrShareCard url={shareUrl} eventTitle={event.title} />
+					<NotifyEmailsCard eventId={event.id} initial={event.notify_emails ?? []} />
 					<EventActions eventId={event.id} status={event.status} />
 				</TabsContent>
 			</Tabs>

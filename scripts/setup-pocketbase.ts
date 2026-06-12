@@ -80,6 +80,10 @@ function date(name: string, required = false): Field {
 	return { name, type: 'date', required }
 }
 
+function json(name: string): Field {
+	return { name, type: 'json', maxSize: 2000 }
+}
+
 /** Crée la collection si absente, sinon ajoute les champs manquants (par nom) et met à jour rules + index. */
 async function upsertCollection(def: { name: string; fields: Field[]; indexes: string[] }): Promise<Collection> {
 	const existing = (await listCollections()).find(c => c.name === def.name)
@@ -139,6 +143,7 @@ async function main() {
 			text('school', { max: 150 }),
 			text('slug', { required: true, max: 200 }),
 			select('status', ['open', 'closed'], true),
+			json('notify_emails'),
 			...autodates,
 		],
 		indexes: [

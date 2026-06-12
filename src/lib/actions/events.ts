@@ -86,6 +86,31 @@ export async function updateEvent(
 	return { ok: true, data: updated }
 }
 
+const notifyEmailsSchema = z
+	.array(z.email('Adresse email invalide'))
+	.max(5, '5 adresses maximum')
+	.transform(emails => [...new Set(emails.map(e => e.trim().toLowerCase()))])
+
+/** Emails de suivi de la réunion : reçoivent les confirmations de RDV et le récapitulatif. */
+export async function updateNotifyEmails(eventId: string, emails: string[]): Promise<ActionResult<string[]>> {
+	const user = await requireTeacher()
+	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }
+	if (!rateLimit(`event-update:${user.id}`, { limit: 20, windowMs: 60_000 })) {
+		return { ok: false, error: RATE_LIMIT_MESSAGE }
+	}
+
+	const parsed = notifyEmailsSchema.safeParse(emails)
+	if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? 'Adresses invalides' }
+
+	const pb = createPb()
+	const event = await getOwnedEvent(pb, eventId, user.id)
+	if (!event) return { ok: false, error: 'Réunion introuvable.' }
+
+	await pb.collection('events').update(eventId, { notify_emails: parsed.data })
+	revalidatePath(`/dashboard/reunions/${eventId}`)
+	return { ok: true, data: parsed.data }
+}
+
 export async function deleteEvent(eventId: string): Promise<ActionResult> {
 	const user = await requireTeacher()
 	if (!user) return { ok: false, error: 'Accès réservé aux enseignant·es.' }

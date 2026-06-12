@@ -1,6 +1,7 @@
 import 'server-only'
 import { Resend } from 'resend'
 import BookingConfirmationEmail from '@/emails/booking-confirmation'
+import EventRecapEmail from '@/emails/event-recap'
 import TeacherBookingNotificationEmail from '@/emails/teacher-booking-notification'
 import { buildIcs, CALENDAR_TAG, googleCalendarUrl } from '@/lib/calendar'
 import { formatParisDateTime } from '@/lib/datetime'
@@ -89,6 +90,7 @@ export async function sendTeacherBookingNotification({
 	comment: string
 	bookingId: string
 }): Promise<boolean> {
+	const ccEmails = (event.notify_emails ?? []).slice(0, 5)
 	try {
 		const parentName = [parent.first_name, parent.last_name].filter(Boolean).join(' ') || 'Parent'
 		const parentEmail = parent.contact_email || parent.email
@@ -99,6 +101,7 @@ export async function sendTeacherBookingNotification({
 		const { error } = await resend.emails.send({
 			from: env.EMAIL_FROM,
 			to: teacher.contact_email || teacher.email,
+			cc: ccEmails.length > 0 ? ccEmails : undefined,
 			subject: `Nouvelle réservation — ${childName} (${event.title})`,
 			react: TeacherBookingNotificationEmail({
 				teacherFirstName: teacher.first_name,
@@ -162,5 +165,50 @@ export function teacherCalendarInput({
 		endIso: slot.ends_at,
 		uid: `teacher-${bookingId}`,
 		updatedIso,
+	}
+}
+
+/**
+ * Récapitulatif complet des rendez-vous d'une réunion, envoyé à la prof et
+ * aux emails de suivi. Ne lève jamais.
+ */
+export async function sendEventRecap({
+	teacher,
+	event,
+	days,
+	totalBookings,
+}: {
+	teacher: UserRecord
+	event: EventRecord
+	days: import('@/emails/event-recap').RecapDay[]
+	totalBookings: number
+}): Promise<boolean> {
+	try {
+		const teacherName = [teacher.first_name, teacher.last_name].filter(Boolean).join(' ') || 'Enseignant·e'
+		const ccEmails = (event.notify_emails ?? []).slice(0, 5)
+
+		const resend = new Resend(env.RESEND_API_KEY)
+		const { error } = await resend.emails.send({
+			from: env.EMAIL_FROM,
+			to: teacher.contact_email || teacher.email,
+			cc: ccEmails.length > 0 ? ccEmails : undefined,
+			subject: `Récapitulatif des rendez-vous — ${event.title}`,
+			react: EventRecapEmail({
+				eventTitle: event.title,
+				school: event.school,
+				teacherName,
+				totalBookings,
+				days,
+				planningUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/reunions/${event.id}`,
+			}),
+		})
+		if (error) {
+			console.error('Envoi du récapitulatif échoué:', error)
+			return false
+		}
+		return true
+	} catch (err) {
+		console.error('Envoi du récapitulatif échoué:', err)
+		return false
 	}
 }
