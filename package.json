@@ -13,7 +13,7 @@
 		"test": "bun test",
 		"setup:pocketbase": "bun scripts/setup-pocketbase.ts"
 	},
-	"packageManager": "bun@1.4.0",
+	"packageManager": "bun@1.4.1",
 	"engines": {
 		"node": ">=20.0.0"
 	},
