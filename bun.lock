@@ -17,7 +17,7 @@
         "lucide-react": "^1.17.0",
         "next": "16.3.4",
         "next-themes": "^0.4.6",
-        "pocketbase": "^0.27.0",
+        "pocketbase": "^0.28.0",
         "qrcode.react": "^4.2.0",
         "radix-ui": "^1.5.0",
         "react": "19.2.8",
@@ -892,7 +892,7 @@
 
     "pkce-challenge": ["pkce-challenge@5.0.1", "https://registry.npmjs.com/pkce-challenge/-/pkce-challenge-5.0.1.tgz", {}, "sha512-wQ0b/W4Fr01qtpHlqSqspcj3EhBvimsdh0KlHhH8HRZnMsEa0ea2fTULOXOS9ccQr3om+GcGRk4e+isrZWV8qQ=="],
 
-    "pocketbase": ["pocketbase@0.27.0", "https://registry.npmjs.com/pocketbase/-/pocketbase-0.27.0.tgz", {}, "sha512-K5N6d93UP/BNMbMnlZ6BUfy9VPCIvLyqhJFOsNI8OsZwzvKWEAfyD36boi5K4ECIOl5HMlo0TzuaeGdKpMwizQ=="],
+    "pocketbase": ["pocketbase@0.28.1", "", {}, "sha512-/3ihkq+rvfcs0MQgrK4sEElOg6gfenHW9S/O+3BSO+V1yT+4B10+9aT22uTQUPqze9ItwNtwWyY5ZmdgVCTdVA=="],
 
     "postal-mime": ["postal-mime@2.7.4", "https://registry.npmjs.com/postal-mime/-/postal-mime-2.7.4.tgz", {}, "sha512-0WdnFQYUrPGGTFu1uOqD2s7omwua8xaeYGdO6rb88oD5yJ/4pPHDA4sdWqfD8wQVfCny563n/HQS7zTFft+f/g=="],
 
