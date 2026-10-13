@@ -47,7 +47,7 @@ export default function LegalPage() {
 			<Section title="Hébergement">
 				<p>
 					Le site est hébergé sur une infrastructure auto-gérée, sur des serveurs fournis par{' '}
-					<strong>netcup GmbH</strong>, Daimlerstraße 25, 76185 Karlsruhe, Allemagne.
+					<strong>netcup GmbH</strong>, Emmy-Noether-Straße 10, 76131 Karlsruhe, Allemagne.
 				</p>
 			</Section>
 
