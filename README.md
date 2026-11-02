@@ -51,7 +51,9 @@ Vérifications : `bun run typecheck` · `bun run check` (biome) · `bun test`.
 3. **Clerk prod** : créer l'instance de production (domaine `maitresse-nanou.fr`), remplacer
    `pk_test_`/`sk_test_` par les clés `pk_live_`/`sk_live_`, recréer le webhook
    `https://maitresse-nanou.fr/webhooks` (événements user.*) et reporter son signing secret.
-4. **Resend** : vérifier le domaine d'envoi de `EMAIL_FROM` (DNS SPF/DKIM) dans le dashboard Resend.
+4. **Resend** : domaine d'envoi `send.orlane-cinquin.fr` (région eu-west-1, DNS SPF/DKIM/DMARC chez
+   Cloudflare). `RESEND_API_KEY` est une clé *sending access* limitée à ce domaine ; `EMAIL_FROM` doit
+   utiliser une adresse `@send.orlane-cinquin.fr`. Les réponses partent vers la prof ou le parent (`replyTo`).
 
 ## Parcours
 

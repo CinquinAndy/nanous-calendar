@@ -44,6 +44,8 @@ export async function sendBookingConfirmation({
 		const { error } = await resend.emails.send({
 			from: env.EMAIL_FROM,
 			to: parent.contact_email || parent.email,
+			// L'expéditeur ne reçoit rien : une réponse du parent arrive chez la prof
+			replyTo: teacher.contact_email || teacher.email,
 			subject: `Rendez-vous confirmé — ${event.title}`,
 			react: BookingConfirmationEmail({
 				parentFirstName: parent.first_name,
@@ -103,6 +105,7 @@ export async function sendTeacherBookingNotification({
 			from: env.EMAIL_FROM,
 			to: teacher.contact_email || teacher.email,
 			cc: ccEmails.length > 0 ? ccEmails : undefined,
+			replyTo: parentEmail,
 			subject: `Nouvelle réservation — ${childName} (${event.title})`,
 			react: TeacherBookingNotificationEmail({
 				teacherFirstName: teacher.first_name,
